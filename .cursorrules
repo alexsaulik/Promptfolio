@@ -1,0 +1,346 @@
+# Promptfolio .cursorrules
+
+# Full-stack prompt marketplace, creator portfolio builder, and AI-powered digital asset lab
+
+## Project Overview
+
+You are building **Promptfolio** - a prompt-first creator commerce platform with output previews, toolkits, AI artist identity, and creative bundles. This is a production-ready SaaS-grade application targeting prompt engineers, visual artists, AI musicians, lyricists, developers, and marketers.
+
+## Core Technology Stack
+
+- **Frontend**: React 18+ with TypeScript, Vite
+- **Styling**: TailwindCSS + shadcn/ui components
+- **Authentication**: Clerk (roles: Viewer, Creator, Admin)
+- **Database**: Supabase (PostgreSQL, Storage, Edge Functions)
+- **Payments**: Stripe (checkout, payouts, Stripe Connect)
+- **Email**: Resend
+- **AI Integration**: OpenAI + Ollama/LLaMA (configurable)
+- **Icons**: Lucide React
+- **Fonts**: Inter or Space Grotesk
+
+## Architecture Principles
+
+### 1. Component Structure
+
+- Use shadcn/ui as the foundation
+- Create custom components in `/src/components/`
+- Follow atomic design: atoms → molecules → organisms → templates
+- Prefer composition over inheritance
+- Use TypeScript interfaces for all props
+
+### 2. File Naming Conventions
+
+- Components: PascalCase (e.g., `PromptCard.tsx`)
+- Hooks: camelCase with 'use' prefix (e.g., `use-prompts.tsx`)
+- Pages: PascalCase (e.g., `PromptDetail.tsx`)
+- Utilities: camelCase (e.g., `formatPrice.ts`)
+- Types: PascalCase with descriptive names (e.g., `PromptData.ts`)
+
+### 3. Hook Naming Convention
+
+- Use hyphenated naming: `use-artists.tsx`, `use-prompts.tsx`, `use-auth.tsx`
+- Export both hook and types from same file
+- Include loading states, error handling, and optimistic updates
+
+## Page Structure & Routes
+
+### Core Pages (17+ Pages)
+
+1. **Home** (`/`) - Featured prompts, search, categories, artist callouts
+2. **Auth** (`/login`, `/signup`) - Clerk authentication with role-based access
+3. **Creator Dashboard** (`/dashboard`) - Tabs: Prompts | Sales | Lab | Followers
+4. **Prompt Editor** (`/create`) - Modal/page for prompt creation with AI tools
+5. **Prompt Detail** (`/prompt/[slug]`) - Full prompt view with previews and purchase
+6. **Public Promptfolio** (`/[username]`) - Creator portfolio with bio and prompts
+7. **AI Artist Page** (`/artist/[slug]`) - Artist gallery with music/prompts
+8. **PromptfolioLab** (`/lab`) - Main lab page with workflows/models/packs
+9. **Lab Workflows** (`/lab/workflows`) - ComfyUI workflow marketplace
+10. **Lab Models** (`/lab/models`) - AI model downloads with Stripe
+11. **Lab Packs** (`/lab/packs`) - Bundled prompt + output + model combos
+12. **Lab Music** (`/lab/music`) - Curated artist packs and genres
+13. **Lab Install** (`/lab/install`) - ComfyUI setup guides and tutorials
+14. **Admin Settings** (`/admin/settings`) - AI config, LLM providers, rate limits
+15. **Admin Panel** (`/admin`) - Content moderation, user management
+16. **404/Fallback** - Custom error page with navigation
+17. **Mobile Navigation** - Responsive hamburger + bottom nav
+
+### Route Connectivity Rules
+
+- ALL prompts must link to related bundles, artists, or lab assets
+- Artist pages link to EVERY related prompt and pack
+- Prompt detail → output → workflow → install guide
+- Lab items link to matching prompts and creators
+- No dead ends - every page connects to 3+ other pages
+
+## UI/UX Guidelines
+
+### Visual Identity
+
+- **Aesthetic**: Creative, premium, clean (Notion + Figma + SoundCloud hybrid)
+- **Dark Mode First**: Primary dark theme with light mode toggle
+- **Mobile-First**: Responsive design with bottom nav and modals
+- **Accessibility**: AA color contrast, keyboard navigation, alt text, focus rings
+
+### Component Design Patterns
+
+```tsx
+// Prompt Card Structure
+interface PromptCardProps {
+  prompt: {
+    id: string;
+    title: string;
+    slug: string;
+    type: 'text' | 'image' | 'music' | 'code';
+    coverImageUrl?: string;
+    price: number;
+    isPaid: boolean;
+    creator: {
+      username: string;
+      avatarUrl?: string;
+    };
+    stats: {
+      views: number;
+      downloads: number;
+      likes: number;
+    };
+    tags: string[];
+  };
+}
+```
+
+### Animation & Interaction
+
+- Use Framer Motion or Tailwind transitions
+- Hover effects: lift + glow border (category colored)
+- Skeleton loading states
+- Smooth page transitions
+- Confirmations with subtle animations (no excessive effects)
+
+### Mobile Responsiveness
+
+- Bottom nav: Explore | Upload | Lab | Account
+- Modal previews for prompts/workflows
+- Sticky CTA bars for purchases
+- Swipeable tabs in Lab and Artist pages
+- Touch-friendly audio players with scrub bars
+
+## Data Patterns
+
+### Database Schema Considerations
+
+```typescript
+// Core entities
+interface Prompt {
+  id: string;
+  slug: string;
+  title: string;
+  content: string;
+  type: 'text' | 'image' | 'music' | 'code';
+  coverImageUrl?: string;
+  previewUrl?: string;
+  price: number;
+  isPaid: boolean;
+  isFeature: boolean;
+  tags: string[];
+  creatorId: string;
+  artistId?: string; // For music prompts
+  stats: PromptStats;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface Artist {
+  id: string;
+  slug: string;
+  name: string;
+  bio?: string;
+  avatarUrl?: string;
+  coverImageUrl?: string;
+  genre: string[];
+  verified: boolean;
+  socialLinks: Record<string, string>;
+  stats: ArtistStats;
+}
+
+interface LabAsset {
+  id: string;
+  type: 'workflow' | 'model' | 'pack';
+  title: string;
+  description: string;
+  fileUrl: string;
+  price: number;
+  requirements?: string;
+  tags: string[];
+  creatorId: string;
+}
+```
+
+### State Management
+
+- Use React Query/TanStack Query for server state
+- Zustand for client state (cart, UI preferences)
+- Context for theme and auth state
+- Optimistic updates for likes, follows, purchases
+
+## AI Integration Guidelines
+
+### LLM Configuration
+
+- Support multiple providers: OpenAI, Ollama, Claude, Custom
+- Admin-configurable fallback models
+- Rate limiting with user-friendly error messages
+- Token limit enforcement
+- Temperature and parameter controls
+
+### AI Features to Implement
+
+- Prompt Rewriter (improve existing prompts)
+- Output Simulator (generate preview outputs)
+- Auto-tagger (genre, style, category detection)
+- SEO metadata generation
+- Artist bio generation
+- Content moderation assistance
+
+### Edge Function Structure
+
+```typescript
+// AI calls via Supabase Edge Functions
+interface AIRequest {
+  prompt: string;
+  type: 'rewrite' | 'generate' | 'tag' | 'moderate';
+  model?: string;
+  temperature?: number;
+}
+
+interface AIResponse {
+  success: boolean;
+  data?: any;
+  error?: string;
+  usage?: {
+    tokens: number;
+    cost: number;
+  };
+}
+```
+
+## Monetization Implementation
+
+### Stripe Integration
+
+- Product creation for prompts, packs, workflows, models
+- Stripe Connect for creator payouts (10-15% platform fee)
+- Checkout sessions with success/cancel URLs
+- Webhook handling for payment confirmation
+- Pro tier subscriptions (monthly/annual)
+
+### Pro Tier Features
+
+- Analytics dashboard
+- Custom domain support
+- Private/unlisted prompts
+- Verified creator badge
+- Email follower export
+- Advanced pack creation tools
+
+## Security & Performance
+
+### Authentication & Authorization
+
+- Clerk role-based access (Viewer, Creator, Admin)
+- Protected routes with proper redirects
+- API key security (never expose in frontend)
+- File upload validation and virus scanning
+
+### Performance Optimizations
+
+- Image optimization with Next.js Image or similar
+- Lazy loading for prompt grids
+- Audio streaming with proper buffering
+- Database query optimization
+- CDN for static assets
+
+### Error Handling
+
+- Graceful fallbacks for AI service failures
+- User-friendly error messages
+- Retry mechanisms for network failures
+- Comprehensive logging for debugging
+
+## Development Guidelines
+
+### Code Quality
+
+- Use TypeScript strictly (no `any` types)
+- ESLint + Prettier configuration
+- Pre-commit hooks with Husky
+- Component testing with React Testing Library
+- E2E testing for critical user flows
+
+### Git Workflow
+
+- Feature branches: `feature/prompt-editor`
+- Conventional commits: `feat:`, `fix:`, `docs:`, `style:`
+- PR reviews required for main branch
+- Automated testing on PR creation
+
+### Environment Configuration
+
+```env
+# Required environment variables
+VITE_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+VITE_SUPABASE_URL=
+VITE_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+STRIPE_PUBLISHABLE_KEY=
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
+OPENAI_API_KEY=
+RESEND_API_KEY=
+```
+
+## Content Guidelines
+
+### Prompt Quality Standards
+
+- Clear, actionable prompts
+- Proper categorization and tagging
+- High-quality preview outputs
+- Attribution for AI-generated content
+- Content moderation for appropriateness
+
+### Artist/Creator Standards
+
+- Verified identity for monetization
+- Quality portfolio requirements
+- Community guidelines compliance
+- Regular activity requirements for featured status
+
+## Future-Ready Features
+
+### Extensibility
+
+- Plugin SDK for custom prompt enhancements
+- API endpoints for external integrations
+- Webhook system for third-party notifications
+- Export capabilities (PDF, GPT Store, etc.)
+
+### Analytics & Insights
+
+- Creator dashboard with detailed metrics
+- A/B testing framework for UI improvements
+- User behavior tracking (privacy-compliant)
+- Revenue analytics and forecasting
+
+## Remember
+
+- Every page must be interconnected (no dead ends)
+- Mobile-first responsive design
+- Accessibility compliance (WCAG AA)
+- Production-ready code quality
+- Comprehensive error handling
+- Performance optimization
+- Security best practices
+- User experience focus
+
+This is a commercial SaaS platform - treat it with production-grade standards and attention to detail.
