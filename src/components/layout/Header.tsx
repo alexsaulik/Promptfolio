@@ -38,7 +38,7 @@ export function Header() {
                         <Sparkles className="h-8 w-8 text-primary animate-glow-pulse" />
                         <div className="absolute inset-0 h-8 w-8 bg-primary/20 rounded-full animate-ping" />
                     </div>
-                    <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+                    <span className="text-xl font-bold bg-gradient-to-r from-primary via-primary-glow to-primary bg-clip-text text-transparent">
                         Promptfolio
                     </span>
                 </Link>

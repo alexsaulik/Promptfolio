@@ -10,7 +10,7 @@ export function Footer() {
                     <div className="space-y-4">
                         <Link to="/" className="flex items-center space-x-2">
                             <Sparkles className="h-6 w-6 text-primary" />
-                            <span className="text-lg font-bold bg-gradient-primary bg-clip-text text-transparent">
+                            <span className="text-lg font-bold bg-gradient-to-r from-primary via-primary-glow to-primary bg-clip-text text-transparent">
                                 Promptfolio
                             </span>
                         </Link>

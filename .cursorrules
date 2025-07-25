@@ -18,6 +18,155 @@ You are building **Promptfolio** - a prompt-first creator commerce platform with
 - **Icons**: Lucide React
 - **Fonts**: Inter or Space Grotesk
 
+## PROMPTFOLIO DESIGN SYSTEM & STYLING RULES
+
+### Core Design Principles
+
+**MANDATORY**: All pages must use consistent dark theme with purple gradients and premium styling.
+
+#### Color Palette
+
+- **Primary**: Purple gradient (`#8b5cf6` to lighter variant)
+- **Background**: Dark theme (`hsl(220 27% 8%)`)
+- **Foreground**: Light text (`hsl(210 40% 98%)`)
+- **Category Colors**:
+  - Music: Pink/Magenta (`hsl(338 80% 55%)`)
+  - Image: Green (`hsl(142 76% 36%)`)
+  - Code: Blue (`hsl(217 92% 60%)`)
+  - Text: Orange (`hsl(25 95% 53%)`)
+
+#### Typography & Gradients
+
+**Brand Name**: ALWAYS use gradient text for "Promptfolio"
+
+```tsx
+<span className="text-xl font-bold bg-gradient-to-r from-primary via-primary-glow to-primary bg-clip-text text-transparent">
+  Promptfolio
+</span>
+```
+
+**Hero Headings**: Use gradient text for impact
+
+```tsx
+className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-primary via-primary-glow to-primary bg-clip-text text-transparent"
+```
+
+**Category Headers**: Use category-specific gradients
+
+```tsx
+// Music: className="bg-gradient-to-r from-music to-music/80 bg-clip-text text-transparent"
+// Image: className="bg-gradient-to-r from-image to-image/80 bg-clip-text text-transparent"
+// Code: className="bg-gradient-to-r from-code to-code/80 bg-clip-text text-transparent"
+// Text: className="bg-gradient-to-r from-text to-text/80 bg-clip-text text-transparent"
+```
+
+#### Layout Standards
+
+**EVERY PAGE MUST FOLLOW THIS STRUCTURE:**
+
+```tsx
+<div className="min-h-screen bg-background">
+  <Header />
+  <main className="py-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Page content */}
+    </div>
+  </main>
+  <Footer />
+</div>
+```
+
+**Section Backgrounds:**
+
+- Main sections: `className="py-20 px-4 bg-background"`
+- Cards: `className="bg-card/50 backdrop-blur-sm border border-border/50"`
+
+#### Component Styling
+
+**Buttons - Use enhanced variants:**
+
+```tsx
+<Button variant="hero" size="xl">        // Primary action
+<Button variant="music" size="lg">       // Music category
+<Button variant="image" size="lg">       // Image category
+<Button variant="code" size="lg">        // Code category
+<Button variant="text" size="lg">        // Text category
+<Button variant="glass" size="icon">     // Glass effect
+```
+
+**Cards with hover effects:**
+
+```tsx
+<Card className="group relative overflow-hidden border-border/50 bg-card/50 backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-elevated hover:border-primary/20 cursor-pointer">
+```
+
+**Icons with Gradients:**
+
+```tsx
+<div className="w-12 h-12 rounded-xl bg-gradient-music flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+  <IconComponent className="h-6 w-6 text-white" />
+</div>
+```
+
+#### Animation Standards
+
+**Available Animations:**
+
+- `animate-fade-in` - Fade in effect
+- `animate-scale-in` - Scale up entrance
+- `animate-float` - Floating movement
+- `animate-glow-pulse` - Glowing pulse effect
+
+**Animation Delays:**
+
+```tsx
+style={{ animationDelay: `${index * 0.1}s` }}
+className="animate-fade-in [animation-delay:0.2s]"
+```
+
+#### Header Structure (MANDATORY)
+
+```tsx
+<header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+```
+
+**Logo with Animation:**
+
+```tsx
+<Link to="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
+  <div className="relative">
+    <Sparkles className="h-8 w-8 text-primary animate-glow-pulse" />
+    <div className="absolute inset-0 h-8 w-8 bg-primary/20 rounded-full animate-ping" />
+  </div>
+  <span className="text-xl font-bold bg-gradient-to-r from-primary via-primary-glow to-primary bg-clip-text text-transparent">
+    Promptfolio
+  </span>
+</Link>
+```
+
+### IMPLEMENTATION CHECKLIST (REQUIRED)
+
+When creating or updating ANY page:
+
+1. ✅ Use proper page structure with Header/Footer
+2. ✅ Apply consistent background classes
+3. ✅ Use gradient text for headings and brand elements
+4. ✅ Implement hover effects and animations
+5. ✅ Apply category-specific theming where relevant
+6. ✅ Ensure proper spacing and typography
+7. ✅ Test dark theme consistency
+8. ✅ Verify gradient effects are working
+9. ✅ Check animation performance
+10. ✅ Validate responsive behavior
+
+### CRITICAL RULES
+
+- NEVER use plain `bg-white` or light backgrounds
+- ALWAYS use HSL color values in CSS variables
+- ALWAYS include animation delays for staggered effects
+- ALWAYS test that gradients use proper Tailwind classes
+- ALWAYS verify all category colors are defined
+
 ## Architecture Principles
 
 ### 1. Component Structure
