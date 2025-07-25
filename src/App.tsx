@@ -1,4 +1,5 @@
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { MobileFloatingDock } from "@/components/layout/MobileFloatingDock";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -36,6 +37,7 @@ import CodeDevelopment from "./pages/explore/CodeDevelopment";
 import MusicAudio from "./pages/explore/MusicAudio";
 import TextWriting from "./pages/explore/TextWriting";
 import VisualArt from "./pages/explore/VisualArt";
+import AIModelsHub from "./pages/lab/AIModelsHub";
 import AudioCreation from "./pages/lab/AudioCreation";
 import CodeGeneration from "./pages/lab/CodeGeneration";
 import ComfyUIWorkflows from "./pages/lab/ComfyUIWorkflows";
@@ -98,6 +100,7 @@ const App = () => (
                         <Route path="/lab/code-generation" element={<CodeGeneration />} />
                         <Route path="/lab/workflows" element={<ComfyUIWorkflows />} />
                         <Route path="/lab/packs" element={<CreativePacks />} />
+                        <Route path="/lab/models" element={<AIModelsHub />} />
                         <Route path="/lab/install" element={<InstallationGuide />} />
                         <Route path="/explore" element={<Explore />} />
                         <Route path="/explore/music-audio" element={<MusicAudio />} />
@@ -139,6 +142,7 @@ const App = () => (
                         <Route path="/artists" element={<Artists />} />
                         <Route path="/category/:slug" element={<CategoryFilter />} />
                         <Route path="/prompt/:slug" element={<PromptDetail />} />
+                        <Route path="/prompt/:slug/purchase" element={<PromptDetail />} />
                         <Route path="/artist/:slug" element={<ArtistDetail />} />
                         <Route path="/workflow/:slug" element={<WorkflowDetail />} />
                         <Route path="/workflow/comfyui-portrait-generator" element={<ComfyUIPortraitGenerator />} />
@@ -156,6 +160,7 @@ const App = () => (
                         <Route path="/:username" element={<UserProfile />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
+                    <MobileFloatingDock />
                 </BrowserRouter>
             </TooltipProvider>
         </QueryClientProvider>

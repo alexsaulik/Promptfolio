@@ -1,3 +1,9 @@
+import { Globe } from "@/components/magicui/globe";
+import { NumberTicker } from "@/components/magicui/number-ticker";
+import { Particles } from "@/components/magicui/particles";
+import { ShimmerButton } from "@/components/magicui/shimmer-button";
+import { TypingAnimation } from "@/components/magicui/typing-animation";
+import { AuroraBackground } from "@/components/ui/aurora-background";
 import { Button } from "@/components/ui/button";
 import { Sparkles, TrendingUp, Users, Zap } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -6,40 +12,26 @@ export function HeroSection() {
     const navigate = useNavigate();
 
     return (
-        <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary/20 via-background to-primary/10">
-            {/* Background Gradient */}
-            <div className="absolute inset-0 z-0">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-background to-primary/10" />
-                <div className="absolute inset-0 bg-gradient-to-tr from-music/10 via-transparent to-code/10" />
-            </div>
-
-            {/* Floating Elements */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-20 left-10 animate-float">
-                    <div className="h-16 w-16 bg-gradient-to-br from-music to-music/60 rounded-lg opacity-60 blur-sm" />
-                </div>
-                <div className="absolute top-40 right-20 animate-float [animation-delay:1s]">
-                    <div className="h-12 w-12 bg-gradient-to-br from-code to-code/60 rounded-full opacity-70 blur-sm" />
-                </div>
-                <div className="absolute bottom-32 left-1/4 animate-float [animation-delay:2s]">
-                    <div className="h-20 w-20 bg-gradient-to-br from-image to-image/60 rounded-2xl opacity-50 blur-sm" />
-                </div>
-                <div className="absolute bottom-20 right-1/3 animate-float [animation-delay:0.5s]">
-                    <div className="h-14 w-14 bg-gradient-to-br from-text to-text/60 rounded-lg opacity-60 blur-sm" />
-                </div>
-            </div>
+        <AuroraBackground className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
+            {/* Particles Background */}
+            <Particles
+                className="absolute inset-0 z-10"
+                quantity={100}
+                ease={80}
+                color="#8B5CF6"
+                refresh
+            />
 
             {/* Content */}
-            <div className="relative z-10 container mx-auto px-4 text-center space-y-8">
+            <div className="relative z-20 container mx-auto px-4 text-center space-y-8">
                 <div className="space-y-4 animate-fade-in">
-                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-red-500 via-purple-500 to-blue-500 bg-clip-text text-transparent animate-glow-pulse hover:scale-105 transition-transform duration-300 cursor-pointer leading-tight">
-                        Your Creative Prompt
-                        <br />
-                        <span className="bg-gradient-to-r from-red-500 via-purple-500 to-blue-500 bg-clip-text text-transparent">
-                            Marketplace
-                        </span>
-                    </h1>
-                    <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+                    <TypingAnimation
+                        className="text-4xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-white via-blue-200 to-purple-200 bg-clip-text text-transparent leading-tight drop-shadow-2xl"
+                        duration={50}
+                    >
+                        Your Creative Prompt Marketplace
+                    </TypingAnimation>
+                    <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto leading-relaxed drop-shadow-lg backdrop-blur-sm bg-white/5 rounded-2xl p-6 border border-white/10">
                         Discover, create, and monetize AI prompts for music, images, code, and text.
                         Join thousands of creators building the future of AI-powered content.
                     </p>
@@ -47,40 +39,58 @@ export function HeroSection() {
 
                 {/* CTA Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-scale-in [animation-delay:0.2s]">
-                    <Button variant="hero" size="xl" className="group" onClick={() => navigate('/upload')}>
-                        <Sparkles className="mr-2 h-5 w-5 group-hover:animate-spin" />
-                        Start Creating
-                    </Button>
-                    <Button variant="outline" size="xl" className="bg-background/50 backdrop-blur-sm" onClick={() => navigate('/explore')}>
+                    <ShimmerButton
+                        className="group px-8 py-3"
+                        onClick={() => navigate('/dashboard')}
+                        shimmerColor="#ffffff"
+                        background="rgba(138, 43, 226, 0.9)"
+                        borderRadius="12px"
+                    >
+                        <span className="flex items-center text-white font-medium">
+                            <Sparkles className="mr-2 h-5 w-5 group-hover:animate-spin" />
+                            Start Creating
+                        </span>
+                    </ShimmerButton>
+                    <Button variant="outline" size="lg" className="bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/20 h-12 px-8 text-base" onClick={() => navigate('/explore')}>
                         Explore Prompts
                     </Button>
                 </div>
 
                 {/* Stats */}
                 <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto pt-8 animate-fade-in [animation-delay:0.4s]">
-                    <div className="text-center space-y-2">
-                        <div className="flex items-center justify-center text-2xl md:text-3xl font-bold text-primary">
+                    <div className="text-center space-y-2 backdrop-blur-sm bg-white/5 rounded-xl p-4 border border-white/10">
+                        <div className="flex items-center justify-center text-2xl md:text-3xl font-bold text-white">
                             <TrendingUp className="mr-2 h-6 w-6" />
-                            50K+
+                            <NumberTicker value={50000} />+
                         </div>
-                        <p className="text-sm text-muted-foreground">Active Prompts</p>
+                        <p className="text-sm text-white/70">Active Prompts</p>
                     </div>
-                    <div className="text-center space-y-2">
-                        <div className="flex items-center justify-center text-2xl md:text-3xl font-bold text-primary">
+                    <div className="text-center space-y-2 backdrop-blur-sm bg-white/5 rounded-xl p-4 border border-white/10">
+                        <div className="flex items-center justify-center text-2xl md:text-3xl font-bold text-white">
                             <Users className="mr-2 h-6 w-6" />
-                            12K+
+                            <NumberTicker value={12000} />+
                         </div>
-                        <p className="text-sm text-muted-foreground">Creators</p>
+                        <p className="text-sm text-white/70">Creators</p>
                     </div>
-                    <div className="text-center space-y-2">
-                        <div className="flex items-center justify-center text-2xl md:text-3xl font-bold text-primary">
+                    <div className="text-center space-y-2 backdrop-blur-sm bg-white/5 rounded-xl p-4 border border-white/10">
+                        <div className="flex items-center justify-center text-2xl md:text-3xl font-bold text-white">
                             <Zap className="mr-2 h-6 w-6" />
-                            1M+
+                            <NumberTicker value={1000000} />+
                         </div>
-                        <p className="text-sm text-muted-foreground">Downloads</p>
+                        <p className="text-sm text-white/70">Downloads</p>
+                    </div>
+                </div>
+
+                {/* Global Community Globe */}
+                <div className="flex flex-col items-center space-y-4 pt-12 animate-fade-in [animation-delay:0.6s]">
+                    <h3 className="text-lg font-semibold text-white/80 backdrop-blur-sm bg-white/5 rounded-lg px-6 py-2 border border-white/10">
+                        Join creators worldwide
+                    </h3>
+                    <div className="relative">
+                        <Globe className="max-w-[300px] mx-auto" />
                     </div>
                 </div>
             </div>
-        </section>
+        </AuroraBackground>
     );
 }

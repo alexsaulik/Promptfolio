@@ -6,12 +6,23 @@ import { supabase } from "@/integrations/supabase/client";
 import { SignOutButton, useUser } from "@clerk/clerk-react";
 import { Beaker, Briefcase, Home, LogOut, Menu, Search, Settings, Sparkles, User, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export function Header() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [userRole, setUserRole] = useState<string | null>(null);
+    const [searchQuery, setSearchQuery] = useState('');
     const { isLoaded, isSignedIn, user } = useUser();
+    const navigate = useNavigate();
+
+    const handleSearch = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (searchQuery.trim()) {
+            navigate(`/explore?search=${encodeURIComponent(searchQuery.trim())}`);
+        } else {
+            navigate('/explore');
+        }
+    };
 
     // Check user role
     useEffect(() => {
@@ -45,7 +56,7 @@ export function Header() {
 
                 {/* Desktop Navigation */}
                 <nav className="hidden md:flex items-center space-x-6">
-                    <Link to="/" className="text-sm font-medium hover:text-primary transition-colors">
+                    <Link to="/explore" className="text-sm font-medium hover:text-primary transition-colors">
                         Explore
                     </Link>
                     <Link to="/lab" className="text-sm font-medium hover:text-primary transition-colors">
@@ -66,13 +77,15 @@ export function Header() {
 
                 {/* Search Bar - Desktop */}
                 <div className="hidden md:flex flex-1 max-w-md mx-8">
-                    <div className="relative w-full">
+                    <form onSubmit={handleSearch} className="relative w-full">
                         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <Input
                             placeholder="Search prompts, artists, workflows..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
                             className="pl-10 bg-muted/50 border-border/50 focus:bg-background transition-colors"
                         />
-                    </div>
+                    </form>
                 </div>
 
                 {/* Auth & Actions - Desktop */}
@@ -158,7 +171,7 @@ export function Header() {
                         {/* Mobile Navigation */}
                         <nav className="flex flex-col space-y-3">
                             <Link
-                                to="/"
+                                to="/explore"
                                 className="flex items-center space-x-2 text-sm font-medium hover:text-primary transition-colors p-2"
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >

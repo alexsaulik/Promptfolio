@@ -50,6 +50,10 @@ All colors MUST be HSL.
         --text: 25 95% 53%;
         --text-foreground: 220 27% 8%;
 
+        /* Video category */
+        --video: 270 95% 60%;
+        --video-foreground: 210 40% 98%;
+
         --destructive: 0 84% 60%;
         --destructive-foreground: 210 40% 98%;
 
@@ -65,6 +69,7 @@ All colors MUST be HSL.
         --gradient-image: linear-gradient(135deg, hsl(var(--image)), hsl(142 76% 50%));
         --gradient-code: linear-gradient(135deg, hsl(var(--code)), hsl(217 92% 75%));
         --gradient-text: linear-gradient(135deg, hsl(var(--text)), hsl(25 95% 68%));
+        --gradient-video: linear-gradient(135deg, hsl(var(--video)), hsl(270 95% 75%));
         --gradient-glass: linear-gradient(135deg, hsl(220 27% 12% / 0.8), hsl(220 27% 16% / 0.6));
 
         /* Shadows for depth */
@@ -75,6 +80,11 @@ All colors MUST be HSL.
         /* Transitions */
         --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         --transition-spring: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        --color-1: oklch(66.2% 0.225 25.9);
+        --color-2: oklch(60.4% 0.26 302);
+        --color-3: oklch(69.6% 0.165 251);
+        --color-4: oklch(80.2% 0.134 225);
+        --color-5: oklch(90.7% 0.231 133);
     }
 
     .light {
@@ -112,6 +122,9 @@ All colors MUST be HSL.
         --text: 25 95% 53%;
         --text-foreground: 220 27% 8%;
 
+        --video: 270 95% 60%;
+        --video-foreground: 210 40% 98%;
+
         --destructive: 0 84.2% 60.2%;
         --destructive-foreground: 210 40% 98%;
 
@@ -124,6 +137,23 @@ All colors MUST be HSL.
         --shadow-glow: 0 0 40px hsl(var(--primary) / 0.2);
         --shadow-card: 0 8px 32px hsl(0 0% 0% / 0.1);
         --shadow-elevated: 0 16px 64px hsl(0 0% 0% / 0.15);
+    }
+
+    .theme {
+        --animate-rainbow: rainbow var(--speed, 2s) infinite linear;
+        --animate-shimmer-slide: shimmer-slide var(--speed) ease-in-out infinite alternate;
+        --animate-spin-around: spin-around calc(var(--speed) * 2) infinite linear;
+        --animate-meteor: meteor 5s linear infinite;
+        --animate-marquee: marquee var(--duration) infinite linear;
+        --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+    }
+
+    .dark {
+        --color-1: oklch(66.2% 0.225 25.9);
+        --color-2: oklch(60.4% 0.26 302);
+        --color-3: oklch(69.6% 0.165 251);
+        --color-4: oklch(80.2% 0.134 225);
+        --color-5: oklch(90.7% 0.231 133);
     }
 }
 
@@ -174,6 +204,10 @@ All colors MUST be HSL.
 
     .bg-gradient-text {
         background: var(--gradient-text);
+    }
+
+    .bg-gradient-video {
+        background: var(--gradient-video);
     }
 
     .bg-gradient-glass {
@@ -268,5 +302,95 @@ All colors MUST be HSL.
 
     50% {
         filter: drop-shadow(0 0 16px hsl(var(--primary) / 0.8));
+    }
+}
+
+/* ---break---
+*/
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+
+    body {
+        @apply bg-background text-foreground;
+    }
+}
+
+/* ---break---
+*/
+
+@theme inline {
+    @keyframes rainbow {
+        0% {
+            background-position: 0%;
+        }
+
+        100% {
+            background-position: 200%;
+        }
+    }
+
+    @keyframes shimmer-slide {
+        to {
+            transform: translate(calc(100cqw - 100%), 0);
+        }
+    }
+
+    @keyframes spin-around {
+        0% {
+            transform: translateZ(0) rotate(0);
+        }
+
+        15%,
+        35% {
+            transform: translateZ(0) rotate(90deg);
+        }
+
+        65%,
+        85% {
+            transform: translateZ(0) rotate(270deg);
+        }
+
+        100% {
+            transform: translateZ(0) rotate(360deg);
+        }
+    }
+
+    @keyframes meteor {
+        0% {
+            transform: rotate(var(--angle)) translateX(0);
+            opacity: 1;
+        }
+
+        70% {
+            opacity: 1;
+        }
+
+        100% {
+            transform: rotate(var(--angle)) translateX(-500px);
+            opacity: 0;
+        }
+    }
+
+    @keyframes marquee {
+        from {
+            transform: translateX(0);
+        }
+
+        to {
+            transform: translateX(calc(-100% - var(--gap)));
+        }
+    }
+
+    @keyframes marquee-vertical {
+        from {
+            transform: translateY(0);
+        }
+
+        to {
+            transform: translateY(calc(-100% - var(--gap)));
+        }
     }
 }

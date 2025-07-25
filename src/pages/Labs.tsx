@@ -4,6 +4,7 @@ const musicProduction = "https://images.unsplash.com/photo-1598488035139-bdbb223
 const videoUpscaling = "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800&h=600&fit=crop";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
+import { WarpBackground } from "@/components/magicui/warp-background";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,8 +13,10 @@ import { Download, Play, Sparkles, Star, Users, Workflow, Zap } from "lucide-rea
 import { Link } from "react-router-dom";
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 const Labs = () => {
     const [activeTab, setActiveTab] = useState("all");
+    const navigate = useNavigate();
     const allWorkflows = [
         {
             id: 1,
@@ -148,11 +151,20 @@ const Labs = () => {
             <Header />
 
             <main className="relative">
-                {/* Hero Section */}
-                <section className="relative py-24 overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10" />
-                    <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-pulse" />
-                    <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-pulse delay-1000" />
+                {/* Hero Section with Subtle Warp Background */}
+                <WarpBackground
+                    className="relative py-24 overflow-hidden !p-0 !border-0 !rounded-none"
+                    perspective={40}
+                    beamsPerSide={1}
+                    beamSize={8}
+                    beamDelayMax={6}
+                    beamDelayMin={2}
+                    beamDuration={10}
+                    gridColor="hsl(var(--border) / 0.3)"
+                >
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent via-40% to-accent/5" />
+                    <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse" />
+                    <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-pulse delay-1000" />
 
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
                         <div className="text-center mb-16">
@@ -168,11 +180,11 @@ const Labs = () => {
                                 From ComfyUI nodes to complete production chains - everything you need to accelerate your creative process.
                             </p>
                             <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in delay-300">
-                                <Button size="lg" className="px-8 py-4 text-lg">
+                                <Button size="lg" className="px-8 py-4 text-lg" onClick={() => navigate('/lab/workflows')}>
                                     <Download className="w-5 h-5 mr-2" />
                                     Browse Workflows
                                 </Button>
-                                <Button variant="outline" size="lg" className="px-8 py-4 text-lg">
+                                <Button variant="outline" size="lg" className="px-8 py-4 text-lg" onClick={() => navigate('/community')}>
                                     <Users className="w-5 h-5 mr-2" />
                                     Join Community
                                 </Button>
@@ -197,6 +209,207 @@ const Labs = () => {
                                 <div className="text-3xl md:text-4xl font-bold text-primary mb-2">2K+</div>
                                 <div className="text-muted-foreground">Creators</div>
                             </div>
+                        </div>
+                    </div>
+                </WarpBackground>
+
+                {/* AI Tools & Features Section */}
+                <section className="py-20 bg-gradient-to-br from-background via-muted/20 to-background">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="text-center mb-16">
+                            <Badge variant="outline" className="mb-4 px-4 py-2">
+                                <Sparkles className="w-4 h-4 mr-2" />
+                                AI Laboratory
+                            </Badge>
+                            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent mb-6">
+                                Professional AI Tools
+                            </h2>
+                            <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+                                Access cutting-edge AI models, experiment with workflows, and accelerate your creative process with our professional toolkit.
+                            </p>
+                        </div>
+
+                        <div className="grid lg:grid-cols-3 gap-8 mb-16">
+                            {/* AI Model Hub */}
+                            <Card className="group hover:shadow-xl transition-all duration-300 hover:scale-105 border-primary/20 cursor-pointer" onClick={() => navigate('/lab/models')}>
+                                <CardHeader>
+                                    <div className="flex items-center space-x-3">
+                                        <div className="p-2 bg-primary/10 rounded-lg">
+                                            <Zap className="h-6 w-6 text-primary" />
+                                        </div>
+                                        <CardTitle className="text-xl">AI Model Hub</CardTitle>
+                                    </div>
+                                </CardHeader>
+                                <CardContent>
+                                    <p className="text-muted-foreground mb-4">
+                                        Access SOTA models: GPT-4, Claude, Gemini, DALL-E 3, Midjourney, Stable Diffusion XL, and more.
+                                    </p>
+                                    <div className="space-y-2">
+                                        <div className="flex justify-between text-sm">
+                                            <span>Available Models</span>
+                                            <span className="font-semibold">50+</span>
+                                        </div>
+                                        <div className="flex justify-between text-sm">
+                                            <span>API Integrations</span>
+                                            <span className="font-semibold">15+</span>
+                                        </div>
+                                        <div className="flex justify-between text-sm">
+                                            <span>Real-time Access</span>
+                                            <span className="font-semibold text-green-500">✓ Live</span>
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            </Card>
+
+                            {/* Workflow Engine */}
+                            <Card className="group hover:shadow-xl transition-all duration-300 hover:scale-105 border-accent/20 cursor-pointer" onClick={() => navigate('/lab/workflows')}>
+                                <CardHeader>
+                                    <div className="flex items-center space-x-3">
+                                        <div className="p-2 bg-accent/10 rounded-lg">
+                                            <Workflow className="h-6 w-6 text-accent" />
+                                        </div>
+                                        <CardTitle className="text-xl">Workflow Engine</CardTitle>
+                                    </div>
+                                </CardHeader>
+                                <CardContent>
+                                    <p className="text-muted-foreground mb-4">
+                                        Chain AI models together, automate complex processes, and build production-ready pipelines.
+                                    </p>
+                                    <div className="space-y-2">
+                                        <div className="flex justify-between text-sm">
+                                            <span>Pre-built Workflows</span>
+                                            <span className="font-semibold">120+</span>
+                                        </div>
+                                        <div className="flex justify-between text-sm">
+                                            <span>Custom Nodes</span>
+                                            <span className="font-semibold">500+</span>
+                                        </div>
+                                        <div className="flex justify-between text-sm">
+                                            <span>ComfyUI Compatible</span>
+                                            <span className="font-semibold text-green-500">✓ Yes</span>
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            </Card>
+
+                            {/* Creative Packs */}
+                            <Card className="group hover:shadow-xl transition-all duration-300 hover:scale-105 border-primary/20 cursor-pointer" onClick={() => navigate('/lab/packs')}>
+                                <CardHeader>
+                                    <div className="flex items-center space-x-3">
+                                        <div className="p-2 bg-primary/10 rounded-lg">
+                                            <Download className="h-6 w-6 text-primary" />
+                                        </div>
+                                        <CardTitle className="text-xl">Creative Packs</CardTitle>
+                                    </div>
+                                </CardHeader>
+                                <CardContent>
+                                    <p className="text-muted-foreground mb-4">
+                                        Ready-to-use prompt collections, LoRA models, and style guides for instant creativity.
+                                    </p>
+                                    <div className="space-y-2">
+                                        <div className="flex justify-between text-sm">
+                                            <span>Prompt Packs</span>
+                                            <span className="font-semibold">200+</span>
+                                        </div>
+                                        <div className="flex justify-between text-sm">
+                                            <span>LoRA Models</span>
+                                            <span className="font-semibold">150+</span>
+                                        </div>
+                                        <div className="flex justify-between text-sm">
+                                            <span>Total Downloads</span>
+                                            <span className="font-semibold">1M+</span>
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        </div>
+
+                        {/* Featured Tools Grid */}
+                        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <Card className="text-center hover:shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer" onClick={() => navigate('/lab/image-generation')}>
+                                <CardContent className="pt-8">
+                                    <div className="text-4xl mb-3">🎨</div>
+                                    <h3 className="font-semibold mb-2">Image Generation</h3>
+                                    <p className="text-sm text-muted-foreground">SDXL, Midjourney, DALL-E</p>
+                                </CardContent>
+                            </Card>
+
+                            <Card className="text-center hover:shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer" onClick={() => navigate('/lab/audio-creation')}>
+                                <CardContent className="pt-8">
+                                    <div className="text-4xl mb-3">🎵</div>
+                                    <h3 className="font-semibold mb-2">Music Creation</h3>
+                                    <p className="text-sm text-muted-foreground">Suno, MusicGen, AIVA</p>
+                                </CardContent>
+                            </Card>
+
+                            <Card className="text-center hover:shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer" onClick={() => navigate('/lab/code-generation')}>
+                                <CardContent className="pt-8">
+                                    <div className="text-4xl mb-3">💻</div>
+                                    <h3 className="font-semibold mb-2">Code Generation</h3>
+                                    <p className="text-sm text-muted-foreground">GitHub Copilot, CodeT5</p>
+                                </CardContent>
+                            </Card>
+
+                            <Card className="text-center hover:shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer" onClick={() => navigate('/lab/video-processing')}>
+                                <CardContent className="pt-8">
+                                    <div className="text-4xl mb-3">🎬</div>
+                                    <h3 className="font-semibold mb-2">Video Processing</h3>
+                                    <p className="text-sm text-muted-foreground">RunwayML, Pika Labs</p>
+                                </CardContent>
+                            </Card>
+                        </div>
+                    </div>
+                </section>
+
+                {/* Featured Workflow Section with WarpBackground Demo */}
+                <section className="py-16 bg-muted/30">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="text-center mb-12">
+                            <h2 className="text-3xl md:text-4xl font-bold mb-4">Featured This Week</h2>
+                            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                                Highlighted workflow with advanced effects
+                            </p>
+                        </div>
+
+                        <div className="flex justify-center">
+                            <WarpBackground
+                                perspective={60}
+                                beamsPerSide={1}
+                                beamSize={6}
+                                beamDelayMax={5}
+                                beamDelayMin={2}
+                                beamDuration={8}
+                                gridColor="hsl(var(--border) / 0.2)"
+                                className="rounded-xl !p-6"
+                            >
+                                <Card className="w-96 bg-card/80 backdrop-blur-sm border-primary/20">
+                                    <CardContent className="flex flex-col gap-4 p-6">
+                                        <div className="flex items-center gap-3">
+                                            <Badge variant="outline" className="text-primary border-primary">
+                                                <Sparkles className="w-3 h-3 mr-1" />
+                                                Featured
+                                            </Badge>
+                                            <Badge variant="secondary">ComfyUI</Badge>
+                                        </div>
+                                        <CardTitle className="text-xl">Professional Portrait Generator</CardTitle>
+                                        <CardDescription className="text-base">
+                                            Advanced lighting controls, background removal, and professional headshot generation.
+                                            Perfect for creating LinkedIn profiles and business portraits.
+                                        </CardDescription>
+                                        <div className="flex items-center justify-between mt-4">
+                                            <div className="flex items-center gap-2">
+                                                <Star className="w-4 h-4 text-yellow-500 fill-current" />
+                                                <span className="font-medium">4.9</span>
+                                                <span className="text-muted-foreground">(247 reviews)</span>
+                                            </div>
+                                            <Button size="sm">
+                                                <Download className="w-4 h-4 mr-2" />
+                                                Download
+                                            </Button>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            </WarpBackground>
                         </div>
                     </div>
                 </section>
@@ -357,9 +570,9 @@ const Labs = () => {
                                     <Button
                                         variant="outline"
                                         className="w-full"
-                                        disabled
+                                        onClick={() => navigate('/upload/workflow')}
                                     >
-                                        Upload (Coming Soon)
+                                        Upload Workflow
                                     </Button>
                                 </CardContent>
                             </Card>
@@ -379,9 +592,9 @@ const Labs = () => {
                                     <Button
                                         variant="outline"
                                         className="w-full"
-                                        disabled
+                                        onClick={() => navigate('/upload/model')}
                                     >
-                                        Upload (Coming Soon)
+                                        Upload Model
                                     </Button>
                                 </CardContent>
                             </Card>
@@ -420,11 +633,20 @@ const Labs = () => {
                             Upload your first workflow and start building your reputation in the community.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <Button size="lg" className="px-8 py-4">
+                            <Button
+                                size="lg"
+                                className="px-8 py-4"
+                                onClick={() => navigate('/upload/workflow')}
+                            >
                                 <Workflow className="w-5 h-5 mr-2" />
                                 Upload Workflow
                             </Button>
-                            <Button variant="outline" size="lg" className="px-8 py-4">
+                            <Button
+                                variant="outline"
+                                size="lg"
+                                className="px-8 py-4"
+                                onClick={() => navigate('/lab/workflows')}
+                            >
                                 Learn More
                             </Button>
                         </div>

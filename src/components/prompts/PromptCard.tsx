@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Code, Download, Eye, Heart, Image, Music, Play, Sparkles, Type } from "lucide-react";
+import { Code, Download, Eye, Heart, Image, Music, Play, Sparkles, Type, Video } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -9,46 +9,74 @@ interface PromptCardProps {
     prompt: {
         id: string;
         title: string;
+        slug?: string;
         description: string;
-        type: 'music' | 'image' | 'code' | 'text';
+        type: 'music' | 'image' | 'code' | 'text' | 'video';
         price: number;
+        isPaid?: boolean;
+        isFeatured?: boolean;
         isPremium?: boolean;
+        isNew?: boolean;
         coverImage?: string;
+        coverImageUrl?: string;
         audioPreview?: string;
         creator: {
             username: string;
+            displayName?: string;
             avatar?: string;
+            avatarUrl?: string;
             isVerified?: boolean;
+            isPro?: boolean;
+            followers?: number;
+            totalSales?: number;
         };
         stats: {
             likes: number;
             downloads: number;
             views: number;
+            rating?: number;
+            reviews?: number;
+            revenue?: number;
         };
         tags: string[];
+        category?: string;
+        difficulty?: string;
+        lastUpdated?: string;
+        createdAt?: string;
+        compatibility?: string[];
+        industries?: string[];
+        license?: string;
+        fileSize?: string;
+        languages?: string[];
+        rating?: number;
     };
 }
 
 const typeConfig = {
     music: {
         icon: Music,
-        variant: "music" as const,
+        variant: "default" as const,
         bgClass: "bg-gradient-music",
     },
     image: {
         icon: Image,
-        variant: "image" as const,
+        variant: "default" as const,
         bgClass: "bg-gradient-image",
     },
     code: {
         icon: Code,
-        variant: "code" as const,
+        variant: "default" as const,
         bgClass: "bg-gradient-code",
     },
     text: {
         icon: Type,
-        variant: "text" as const,
+        variant: "default" as const,
         bgClass: "bg-gradient-text",
+    },
+    video: {
+        icon: Video,
+        variant: "default" as const,
+        bgClass: "bg-gradient-video",
     },
 };
 
@@ -70,13 +98,13 @@ export function PromptCard({ prompt }: PromptCardProps) {
     return (
         <Card
             className="group relative overflow-hidden rounded-2xl border-border/50 bg-card/50 backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-elevated hover:border-primary/20 cursor-pointer"
-            onClick={() => navigate(`/prompt/${prompt.id}`)}
+            onClick={() => navigate(`/prompt/${prompt.slug || prompt.id}`)}
         >
             {/* Cover Image/Preview */}
             <div className="relative aspect-video w-full overflow-hidden">
-                {prompt.coverImage ? (
+                {(prompt.coverImage || prompt.coverImageUrl) ? (
                     <img
-                        src={prompt.coverImage}
+                        src={prompt.coverImage || prompt.coverImageUrl}
                         alt={prompt.title}
                         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                     />
@@ -90,16 +118,16 @@ export function PromptCard({ prompt }: PromptCardProps) {
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                     {prompt.type === 'music' && prompt.audioPreview && (
                         <Button
-                            variant="glass"
+                            variant="secondary"
                             size="icon"
-                            className="h-12 w-12 rounded-full"
+                            className="h-12 w-12 rounded-full bg-white/20 backdrop-blur-sm border-white/20"
                             onClick={handlePlayAudio}
                         >
                             <Play className={`h-5 w-5 ${isPlaying ? 'animate-pulse' : ''}`} />
                         </Button>
                     )}
                     {prompt.type !== 'music' && (
-                        <Button variant="glass" size="icon" className="h-12 w-12 rounded-full">
+                        <Button variant="secondary" size="icon" className="h-12 w-12 rounded-full bg-white/20 backdrop-blur-sm border-white/20">
                             <Eye className="h-5 w-5" />
                         </Button>
                     )}
@@ -117,9 +145,9 @@ export function PromptCard({ prompt }: PromptCardProps) {
 
                 {/* Like Button */}
                 <Button
-                    variant="glass"
+                    variant="secondary"
                     size="icon"
-                    className="absolute top-3 right-3 h-8 w-8 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute top-3 right-3 h-8 w-8 rounded-full opacity-0 group-hover:opacity-100 transition-opacity bg-white/20 backdrop-blur-sm border-white/20"
                     onClick={(e) => {
                         e.stopPropagation();
                         setIsLiked(!isLiked);
@@ -153,9 +181,9 @@ export function PromptCard({ prompt }: PromptCardProps) {
 
                 {/* Creator */}
                 <div className="flex items-center space-x-2">
-                    {prompt.creator.avatar ? (
+                    {(prompt.creator.avatar || prompt.creator.avatarUrl) ? (
                         <img
-                            src={prompt.creator.avatar}
+                            src={prompt.creator.avatar || prompt.creator.avatarUrl}
                             alt={prompt.creator.username}
                             className="h-6 w-6 rounded-full"
                         />
@@ -212,7 +240,7 @@ export function PromptCard({ prompt }: PromptCardProps) {
                         className="flex-1"
                         onClick={(e) => {
                             e.stopPropagation(); // Prevent card click
-                            navigate(`/prompt/${prompt.id}`);
+                            navigate(`/prompt/${prompt.slug || prompt.id}`);
                         }}
                     >
                         Preview
@@ -220,7 +248,7 @@ export function PromptCard({ prompt }: PromptCardProps) {
                     <Button
                         variant={typeVariant}
                         size="sm"
-                        className="flex-1"
+                        className="flex-1 bg-primary hover:bg-primary/90"
                         onClick={(e) => {
                             e.stopPropagation(); // Prevent card click
                             if (prompt.price === 0) {
@@ -228,7 +256,7 @@ export function PromptCard({ prompt }: PromptCardProps) {
                                 console.log('Downloading free prompt:', prompt.id);
                             } else {
                                 // Navigate to purchase page
-                                navigate(`/prompt/${prompt.id}/purchase`);
+                                navigate(`/prompt/${prompt.slug || prompt.id}/purchase`);
                             }
                         }}
                     >

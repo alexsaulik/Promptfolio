@@ -1,6 +1,7 @@
 import { CreatePromptForm } from "@/components/forms/CreatePromptForm";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
+import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -48,9 +49,9 @@ const Dashboard = () => {
     }
 
     return (
-        <div className="min-h-screen bg-background">
+        <div className="min-h-screen bg-background relative">
             <Header />
-            <main className="container py-8">
+            <main className="container py-8 relative z-10">
                 <div className="space-y-8">
                     {/* Header */}
                     <div className="flex items-center justify-between">
@@ -60,10 +61,17 @@ const Dashboard = () => {
                         </div>
                         <Dialog open={showCreateForm} onOpenChange={setShowCreateForm}>
                             <DialogTrigger asChild>
-                                <Button className="bg-gradient-primary">
-                                    <Plus className="mr-2 h-4 w-4" />
-                                    Create Prompt
-                                </Button>
+                                <ShimmerButton
+                                    className="px-6 py-2"
+                                    shimmerColor="#ffffff"
+                                    background="rgba(138, 43, 226, 0.9)"
+                                    borderRadius="8px"
+                                >
+                                    <span className="flex items-center text-white font-medium">
+                                        <Plus className="mr-2 h-4 w-4" />
+                                        Create Prompt
+                                    </span>
+                                </ShimmerButton>
                             </DialogTrigger>
                             <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
                                 <CreatePromptForm
