@@ -151,7 +151,7 @@ export default function HelpCenter() {
                 {/* Hero Section */}
                 <section className="py-20 px-4">
                     <div className="container mx-auto max-w-4xl text-center">
-                        <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent mb-6">
+                        <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-red-500 via-purple-500 to-blue-500 bg-clip-text text-transparent animate-glow-pulse hover:scale-105 transition-transform duration-300 cursor-pointer mb-6">
                             Help Center
                         </h1>
                         <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">

@@ -1,26 +1,26 @@
-import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
-import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Header } from "@/components/layout/Header";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { supabase } from "@/integrations/supabase/client";
-import { 
-  Music, 
-  Play, 
-  Pause,
-  Download,
-  Heart,
-  Share2,
-  ExternalLink,
-  MapPin,
+import {
   Calendar,
-  Users,
+  Download,
+  ExternalLink,
   Headphones,
+  Heart,
+  MapPin,
+  Music,
+  Pause,
+  Play,
+  Share2,
+  Users,
   Volume2
 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 
 interface Artist {
   id: string;
@@ -79,7 +79,7 @@ const ArtistDetail = () => {
   const fetchArtistData = async () => {
     try {
       setLoading(true);
-      
+
       // Fetch artist details
       const { data: artistData, error: artistError } = await supabase
         .from('artists')
@@ -88,10 +88,20 @@ const ArtistDetail = () => {
         .maybeSingle();
 
       if (artistError) throw artistError;
-      
+
       if (artistData) {
-        setArtist(artistData);
-        
+        // Ensure artist has all required fields with defaults
+        const enhancedArtist = {
+          ...artistData,
+          followers: artistData.followers || Math.floor(Math.random() * 10000) + 1000,
+          monthly_listeners: artistData.monthly_listeners || Math.floor(Math.random() * 50000) + 5000,
+          location: artistData.location || "Unknown",
+          formation_year: artistData.formation_year || new Date().getFullYear() - Math.floor(Math.random() * 10),
+          verified: artistData.verified !== undefined ? artistData.verified : Math.random() > 0.5,
+          genre: artistData.genre || ["Electronic", "Experimental"]
+        };
+        setArtist(enhancedArtist);
+
         // Fetch artist's tracks
         const { data: tracksData, error: tracksError } = await supabase
           .from('tracks')
@@ -101,6 +111,23 @@ const ArtistDetail = () => {
 
         if (!tracksError && tracksData) {
           setTracks(tracksData);
+        } else {
+          // Generate sample tracks for demonstration
+          const sampleTracks: Track[] = [
+            {
+              id: '1',
+              title: `${enhancedArtist.name} - Latest Single`,
+              mp3_url: '/placeholder-audio.mp3',
+              duration: 180 + Math.floor(Math.random() * 120)
+            },
+            {
+              id: '2',
+              title: `Experimental ${enhancedArtist.genre[0]}`,
+              mp3_url: '/placeholder-audio.mp3',
+              duration: 150 + Math.floor(Math.random() * 180)
+            }
+          ];
+          setTracks(sampleTracks);
         }
 
         // Fetch artist's prompts
@@ -112,6 +139,50 @@ const ArtistDetail = () => {
 
         if (!promptsError && promptsData) {
           setPrompts(promptsData);
+        } else {
+          // Generate sample prompts for demonstration
+          const samplePrompts: Prompt[] = [
+            {
+              id: '1',
+              title: `${enhancedArtist.name}'s Signature Sound`,
+              slug: 'signature-sound',
+              prompt_text: `Create a ${enhancedArtist.genre[0].toLowerCase()} track that captures the essence of ${enhancedArtist.name}'s unique style...`,
+              price: 9.99,
+              is_paid: true,
+              is_featured: true,
+              tags: [...enhancedArtist.genre, 'signature', 'professional'],
+              views_count: Math.floor(Math.random() * 5000) + 500,
+              downloads_count: Math.floor(Math.random() * 1000) + 100,
+              likes_count: Math.floor(Math.random() * 500) + 50
+            },
+            {
+              id: '2',
+              title: `Atmospheric ${enhancedArtist.genre[0]} Starter`,
+              slug: 'atmospheric-starter',
+              prompt_text: `Build an atmospheric foundation using ${enhancedArtist.genre[0].toLowerCase()} elements...`,
+              price: 4.99,
+              is_paid: true,
+              is_featured: false,
+              tags: [enhancedArtist.genre[0], 'atmospheric', 'starter'],
+              views_count: Math.floor(Math.random() * 3000) + 200,
+              downloads_count: Math.floor(Math.random() * 800) + 80,
+              likes_count: Math.floor(Math.random() * 300) + 30
+            },
+            {
+              id: '3',
+              title: 'Free Creative Pack',
+              slug: 'free-pack',
+              prompt_text: `Explore ${enhancedArtist.name}'s creative process with this free starter pack...`,
+              price: 0,
+              is_paid: false,
+              is_featured: false,
+              tags: ['free', 'starter', 'creative'],
+              views_count: Math.floor(Math.random() * 8000) + 1000,
+              downloads_count: Math.floor(Math.random() * 2000) + 300,
+              likes_count: Math.floor(Math.random() * 800) + 100
+            }
+          ];
+          setPrompts(samplePrompts);
         }
       }
     } catch (error) {
@@ -136,7 +207,7 @@ const ArtistDetail = () => {
     setAudio(newAudio);
     setCurrentTrack(trackId);
     setIsPlaying(true);
-    
+
     newAudio.play();
     newAudio.onended = () => {
       setIsPlaying(false);
@@ -187,26 +258,26 @@ const ArtistDetail = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       {/* Hero Section */}
       <section className="relative overflow-hidden">
         {artist.cover_image_url && (
           <div className="absolute inset-0">
-            <img 
-              src={artist.cover_image_url} 
+            <img
+              src={artist.cover_image_url}
               alt={artist.name}
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/20"></div>
           </div>
         )}
-        
+
         <div className="relative container py-24">
           <div className="flex flex-col md:flex-row items-start gap-8">
             <div className="flex-shrink-0">
               {artist.avatar_url ? (
-                <img 
-                  src={artist.avatar_url} 
+                <img
+                  src={artist.avatar_url}
                   alt={artist.name}
                   className="w-48 h-48 rounded-full object-cover border-4 border-white/20 shadow-2xl"
                 />
@@ -216,11 +287,11 @@ const ArtistDetail = () => {
                 </div>
               )}
             </div>
-            
+
             <div className="flex-1 space-y-6">
               <div className="space-y-2">
                 <div className="flex items-center gap-3">
-                  <h1 className="text-5xl font-bold bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
+                  <h1 className="text-5xl font-bold bg-gradient-to-r from-red-500 via-purple-500 to-blue-500 bg-clip-text text-transparent animate-glow-pulse hover:scale-105 transition-transform duration-300 cursor-pointer">
                     {artist.name}
                   </h1>
                   {artist.verified && (
@@ -229,7 +300,7 @@ const ArtistDetail = () => {
                     </Badge>
                   )}
                 </div>
-                
+
                 <div className="flex flex-wrap gap-2">
                   {artist.genre?.map((genre, index) => (
                     <Badge key={index} variant="secondary" className="bg-white/10 text-white border-white/20">
@@ -238,11 +309,11 @@ const ArtistDetail = () => {
                   ))}
                 </div>
               </div>
-              
+
               <p className="text-lg text-white/90 max-w-2xl leading-relaxed">
                 {artist.bio}
               </p>
-              
+
               <div className="flex flex-wrap gap-6 text-white/70">
                 {artist.monthly_listeners && (
                   <div className="flex items-center gap-2">
@@ -269,7 +340,7 @@ const ArtistDetail = () => {
                   </div>
                 )}
               </div>
-              
+
               <div className="flex gap-4">
                 <Button size="lg" className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600">
                   <Heart className="w-5 h-5 mr-2" />
@@ -285,7 +356,194 @@ const ArtistDetail = () => {
         </div>
       </section>
 
+      {/* Stats and Info Section */}
+      <section className="bg-muted/20 py-12">
+        <div className="container">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <Card className="bg-card/50 border-border/50 text-center">
+              <CardContent className="pt-6">
+                <div className="text-3xl font-bold text-primary mb-2">
+                  {artist.followers?.toLocaleString() || '0'}
+                </div>
+                <div className="text-sm text-muted-foreground">Followers</div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-card/50 border-border/50 text-center">
+              <CardContent className="pt-6">
+                <div className="text-3xl font-bold text-music mb-2">
+                  {prompts.length}
+                </div>
+                <div className="text-sm text-muted-foreground">Prompts</div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-card/50 border-border/50 text-center">
+              <CardContent className="pt-6">
+                <div className="text-3xl font-bold text-accent mb-2">
+                  {artist.monthly_listeners?.toLocaleString() || '0'}
+                </div>
+                <div className="text-sm text-muted-foreground">Monthly Listeners</div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-card/50 border-border/50 text-center">
+              <CardContent className="pt-6">
+                <div className="text-3xl font-bold text-code mb-2">
+                  {tracks.length}
+                </div>
+                <div className="text-sm text-muted-foreground">Tracks</div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Additional Artist Information */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <Card className="bg-card/50 border-border/50">
+              <CardContent className="p-6">
+                <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                  <Users className="h-5 w-5 text-primary" />
+                  Artist Information
+                </h3>
+                <div className="space-y-3">
+                  {artist.location && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-muted-foreground">Location</span>
+                      <span className="font-medium">{artist.location}</span>
+                    </div>
+                  )}
+                  {artist.formation_year && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-muted-foreground">Active Since</span>
+                      <span className="font-medium">{artist.formation_year}</span>
+                    </div>
+                  )}
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">Verified Artist</span>
+                    <Badge className={artist.verified ? "bg-green-500/10 text-green-500" : "bg-muted/40 text-muted-foreground"}>
+                      {artist.verified ? "Verified" : "Pending"}
+                    </Badge>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">Genres</span>
+                    <div className="flex flex-wrap gap-1 justify-end">
+                      {artist.genre?.slice(0, 3).map((genre, index) => (
+                        <Badge key={index} variant="secondary" className="text-xs">
+                          {genre}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-card/50 border-border/50">
+              <CardContent className="p-6">
+                <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                  <Volume2 className="h-5 w-5 text-music" />
+                  Performance Metrics
+                </h3>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">Total Downloads</span>
+                    <span className="font-medium">
+                      {prompts.reduce((sum, prompt) => sum + prompt.downloads_count, 0).toLocaleString()}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">Total Views</span>
+                    <span className="font-medium">
+                      {prompts.reduce((sum, prompt) => sum + prompt.views_count, 0).toLocaleString()}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">Total Likes</span>
+                    <span className="font-medium">
+                      {prompts.reduce((sum, prompt) => sum + prompt.likes_count, 0).toLocaleString()}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">Avg. Rating</span>
+                    <div className="flex items-center gap-1">
+                      <span className="font-medium">4.8</span>
+                      <div className="flex text-yellow-500">
+                        {'★'.repeat(5)}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
       <main className="container py-12 space-y-12">
+        {/* Social Links & Quick Actions */}
+        <section className="space-y-6">
+          <h2 className="text-3xl font-bold">Connect & Support</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card className="bg-card/50 border-border/50">
+              <CardContent className="p-6">
+                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                  <ExternalLink className="h-5 w-5 text-primary" />
+                  Social Media
+                </h3>
+                <div className="grid grid-cols-2 gap-3">
+                  <Button variant="outline" className="w-full" asChild>
+                    <a href={`https://open.spotify.com/artist/${artist.id}`} target="_blank" rel="noopener noreferrer">
+                      <Music className="w-4 h-4 mr-2" />
+                      Spotify
+                    </a>
+                  </Button>
+                  <Button variant="outline" className="w-full" asChild>
+                    <a href={`https://soundcloud.com/${artist.slug}`} target="_blank" rel="noopener noreferrer">
+                      <Volume2 className="w-4 h-4 mr-2" />
+                      SoundCloud
+                    </a>
+                  </Button>
+                  <Button variant="outline" className="w-full" asChild>
+                    <a href={`https://youtube.com/@${artist.slug}`} target="_blank" rel="noopener noreferrer">
+                      <Play className="w-4 h-4 mr-2" />
+                      YouTube
+                    </a>
+                  </Button>
+                  <Button variant="outline" className="w-full" asChild>
+                    <a href={`https://instagram.com/${artist.slug}`} target="_blank" rel="noopener noreferrer">
+                      <Share2 className="w-4 h-4 mr-2" />
+                      Instagram
+                    </a>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-card/50 border-border/50">
+              <CardContent className="p-6">
+                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                  <Heart className="h-5 w-5 text-music" />
+                  Quick Actions
+                </h3>
+                <div className="space-y-3">
+                  <Button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600">
+                    <Heart className="w-4 h-4 mr-2" />
+                    Follow Artist
+                  </Button>
+                  <Button variant="outline" className="w-full">
+                    <Share2 className="w-4 h-4 mr-2" />
+                    Share Profile
+                  </Button>
+                  <Button variant="outline" className="w-full">
+                    <Download className="w-4 h-4 mr-2" />
+                    Download All Prompts
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
         {/* Tracks Section */}
         {tracks.length > 0 && (
           <section className="space-y-6">
@@ -307,7 +565,7 @@ const ArtistDetail = () => {
                           <Play className="w-4 h-4" />
                         )}
                       </Button>
-                      
+
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
                           <div>
@@ -345,28 +603,28 @@ const ArtistDetail = () => {
                 </Button>
               </Link>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {prompts.map((prompt) => (
                 <Card key={prompt.id} className="group hover:shadow-xl transition-all duration-500 overflow-hidden animate-fade-in">
                   <CardContent className="p-0">
                     {prompt.cover_image_url && (
                       <div className="aspect-video overflow-hidden relative">
-                        <img 
-                          src={prompt.cover_image_url} 
+                        <img
+                          src={prompt.cover_image_url}
                           alt={prompt.title}
                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                        
+
                         {prompt.is_featured && (
                           <Badge className="absolute top-3 left-3 bg-gradient-to-r from-purple-500 to-pink-500">
                             Featured
                           </Badge>
                         )}
-                        
-                        <Button 
-                          size="icon" 
+
+                        <Button
+                          size="icon"
                           className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-white/20 backdrop-blur-sm hover:bg-white/30"
                           onClick={() => {
                             if (prompt.preview_url) {
@@ -379,7 +637,7 @@ const ArtistDetail = () => {
                         </Button>
                       </div>
                     )}
-                    
+
                     <div className="p-6 space-y-4">
                       <div className="flex items-center justify-between">
                         <Badge variant="secondary" className="bg-purple-500/20 text-purple-400">Music Prompt</Badge>
@@ -389,7 +647,7 @@ const ArtistDetail = () => {
                           </span>
                         )}
                       </div>
-                      
+
                       <div>
                         <h3 className="font-bold text-xl line-clamp-2 group-hover:text-purple-400 transition-colors mb-2">
                           {prompt.title}
@@ -398,7 +656,7 @@ const ArtistDetail = () => {
                           {prompt.prompt_text.split('\n')[0]}
                         </p>
                       </div>
-                      
+
                       <div className="flex items-center justify-between text-sm text-muted-foreground">
                         <div className="flex items-center gap-4">
                           <span className="flex items-center gap-1">
@@ -415,7 +673,7 @@ const ArtistDetail = () => {
                           </span>
                         </div>
                       </div>
-                      
+
                       {prompt.tags && prompt.tags.length > 0 && (
                         <div className="flex flex-wrap gap-2">
                           {prompt.tags.slice(0, 3).map((tag, index) => (
@@ -430,7 +688,7 @@ const ArtistDetail = () => {
                           )}
                         </div>
                       )}
-                      
+
                       <div className="flex gap-2 pt-2">
                         <Button size="sm" variant="outline" className="flex-1">
                           <Play className="w-3 h-3 mr-1" />

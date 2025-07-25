@@ -97,7 +97,7 @@ const Pricing = () => {
                             <Sparkles className="h-4 w-4 mr-2" />
                             Transparent Pricing
                         </Badge>
-                        <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary via-primary-glow to-primary bg-clip-text text-transparent">
+                        <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-red-500 via-purple-500 to-blue-500 bg-clip-text text-transparent animate-glow-pulse hover:scale-105 transition-transform duration-300 cursor-pointer">
                             Choose Your Creative Journey
                         </h1>
                         <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
@@ -111,8 +111,8 @@ const Pricing = () => {
                             <Card
                                 key={plan.name}
                                 className={`relative overflow-hidden transition-all duration-300 hover:scale-105 ${plan.popular
-                                        ? 'border-primary shadow-glow ring-2 ring-primary/20'
-                                        : 'hover:border-primary/50'
+                                    ? 'border-primary shadow-glow ring-2 ring-primary/20'
+                                    : 'hover:border-primary/50'
                                     }`}
                             >
                                 {plan.popular && (
@@ -126,8 +126,8 @@ const Pricing = () => {
                                 <CardHeader className="text-center pb-8">
                                     <div className="flex justify-center mb-4">
                                         <div className={`p-3 rounded-full ${plan.popular
-                                                ? 'bg-gradient-to-r from-primary/20 to-primary-glow/20'
-                                                : 'bg-muted'
+                                            ? 'bg-gradient-to-r from-primary/20 to-primary-glow/20'
+                                            : 'bg-muted'
                                             }`}>
                                             {plan.icon}
                                         </div>

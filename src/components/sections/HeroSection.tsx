@@ -32,10 +32,10 @@ export function HeroSection() {
             {/* Content */}
             <div className="relative z-10 container mx-auto px-4 text-center space-y-8">
                 <div className="space-y-4 animate-fade-in">
-                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-primary via-primary-glow to-primary bg-clip-text text-transparent leading-tight">
+                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-red-500 via-purple-500 to-blue-500 bg-clip-text text-transparent animate-glow-pulse hover:scale-105 transition-transform duration-300 cursor-pointer leading-tight">
                         Your Creative Prompt
                         <br />
-                        <span className="bg-gradient-to-r from-music via-image to-code bg-clip-text text-transparent">
+                        <span className="bg-gradient-to-r from-red-500 via-purple-500 to-blue-500 bg-clip-text text-transparent">
                             Marketplace
                         </span>
                     </h1>

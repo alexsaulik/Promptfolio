@@ -27,6 +27,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import PromptDetail from "./pages/PromptDetail";
 import SignOut from "./pages/SignOut";
 import TermsOfService from "./pages/TermsOfService";
+import TitleEffectsDemo from "./pages/TitleEffectsDemo";
 import UserProfile from "./pages/UserProfile";
 import WorkflowDetail from "./pages/WorkflowDetail";
 import AdminArtists from "./pages/admin/Artists";
@@ -36,7 +37,10 @@ import TextWriting from "./pages/explore/TextWriting";
 import VisualArt from "./pages/explore/VisualArt";
 import AudioCreation from "./pages/lab/AudioCreation";
 import CodeGeneration from "./pages/lab/CodeGeneration";
+import ComfyUIWorkflows from "./pages/lab/ComfyUIWorkflows";
+import CreativePacks from "./pages/lab/CreativePacks";
 import ImageGeneration from "./pages/lab/ImageGeneration";
+import InstallationGuide from "./pages/lab/InstallationGuide";
 import VideoProcessing from "./pages/lab/VideoProcessing";
 import CodePrompts from "./pages/prompts/CodePrompts";
 import ImagePrompts from "./pages/prompts/ImagePrompts";
@@ -91,6 +95,9 @@ const App = () => (
                         <Route path="/lab/video-processing" element={<VideoProcessing />} />
                         <Route path="/lab/audio-creation" element={<AudioCreation />} />
                         <Route path="/lab/code-generation" element={<CodeGeneration />} />
+                        <Route path="/lab/workflows" element={<ComfyUIWorkflows />} />
+                        <Route path="/lab/packs" element={<CreativePacks />} />
+                        <Route path="/lab/install" element={<InstallationGuide />} />
                         <Route path="/explore" element={<Explore />} />
                         <Route path="/explore/music-audio" element={<MusicAudio />} />
                         <Route path="/explore/visual-art" element={<VisualArt />} />
@@ -143,6 +150,7 @@ const App = () => (
                         <Route path="/privacy" element={<PrivacyPolicy />} />
                         <Route path="/terms" element={<TermsOfService />} />
                         <Route path="/cookies" element={<CookiePolicy />} />
+                        <Route path="/title-effects-demo" element={<TitleEffectsDemo />} />
                         <Route path="/:username" element={<UserProfile />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
