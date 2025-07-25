@@ -332,15 +332,335 @@ RESEND_API_KEY=
 - User behavior tracking (privacy-compliant)
 - Revenue analytics and forecasting
 
+## Promptfolio Design System & Style Guidelines
+
+### Brand Identity & Aesthetic
+- **Design Philosophy**: Creative, premium, clean (Notion + Figma + SoundCloud hybrid)
+- **Target Feel**: Gallery-quality display for designers, artists, and musicians
+- **Visual Hierarchy**: Content-first with clear information architecture
+- **Brand Personality**: Professional, innovative, creator-focused, community-driven
+
+### Color System (HSL Format)
+```css
+/* Dark Mode First - Primary Theme */
+--background: 220 27% 8%;           /* Deep charcoal background */
+--foreground: 210 40% 98%;          /* Pure white text */
+--card: 224 36% 10%;                /* Elevated card background */
+
+/* Creative Purple Primary */
+--primary: 262 80% 50%;             /* Vibrant purple #8b5cf6 */
+--primary-glow: 262 80% 65%;        /* Lighter purple for effects */
+
+/* Category-Specific Colors */
+--music: 338 80% 55%;               /* Pink/Magenta for music prompts */
+--image: 142 76% 36%;               /* Green for visual art */
+--code: 217 92% 60%;                /* Blue for code/development */
+--text: 25 95% 53%;                 /* Orange for text/writing */
+
+/* Semantic Colors */
+--secondary: 215 25% 27%;           /* Muted blue-gray */
+--muted: 215 25% 20%;               /* Background variations */
+--accent: 195 100% 50%;             /* Cyan for highlights */
+--destructive: 0 84% 60%;           /* Red for errors/warnings */
+```
+
+### Gradient System
+```css
+/* Premium Gradients for Visual Impact */
+--gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+--gradient-music: linear-gradient(135deg, hsl(var(--music)), hsl(338 80% 70%));
+--gradient-image: linear-gradient(135deg, hsl(var(--image)), hsl(142 76% 50%));
+--gradient-code: linear-gradient(135deg, hsl(var(--code)), hsl(217 92% 75%));
+--gradient-text: linear-gradient(135deg, hsl(var(--text)), hsl(25 95% 68%));
+--gradient-glass: linear-gradient(135deg, hsl(220 27% 12% / 0.8), hsl(220 27% 16% / 0.6));
+```
+
+### Typography Scale
+```css
+/* Font System */
+Font Family: Inter or Space Grotesk (system fallback)
+Text Sizes:
+- xs: 0.75rem    /* Small labels, badges */
+- sm: 0.875rem   /* Body text, descriptions */
+- base: 1rem     /* Default body text */
+- lg: 1.125rem   /* Card titles */
+- xl: 1.25rem    /* Section headers */
+- 2xl: 1.5rem    /* Page titles */
+- 3xl: 1.875rem  /* Hero headings */
+- 4xl: 2.25rem   /* Landing page headers */
+
+Font Weights:
+- medium: 500    /* Body text */
+- semibold: 600  /* Card titles, buttons */
+- bold: 700      /* Headers, emphasis */
+```
+
+### Spacing & Layout System
+```css
+/* Consistent Spacing Scale */
+Spacing: 0.25rem increments (4px base)
+- 1: 0.25rem  (4px)   /* Tight spacing */
+- 2: 0.5rem   (8px)   /* Small gaps */
+- 3: 0.75rem  (12px)  /* Default spacing */
+- 4: 1rem     (16px)  /* Standard spacing */
+- 6: 1.5rem   (24px)  /* Section spacing */
+- 8: 2rem     (32px)  /* Large spacing */
+- 12: 3rem    (48px)  /* Section padding */
+- 16: 4rem    (64px)  /* Page padding */
+
+/* Border Radius System */
+--radius: 0.75rem (12px) /* Primary radius */
+- sm: 0.5rem    (8px)    /* Small elements */
+- md: 0.625rem  (10px)   /* Cards, buttons */
+- lg: 0.75rem   (12px)   /* Default radius */
+- xl: 1rem      (16px)   /* Large cards */
+- 2xl: 1.5rem   (24px)   /* Hero elements */
+```
+
+### Component Design Patterns
+
+#### Card Components
+```tsx
+// Standard Card Pattern
+<Card className="group relative overflow-hidden rounded-2xl border-border/50 bg-card/50 backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-elevated hover:border-primary/20 cursor-pointer">
+  {/* Content */}
+</Card>
+
+// Category-specific Cards with Gradients
+<Card className="bg-gradient-to-br from-purple-500/20 via-blue-600/10 to-pink-600/20 border-purple-200/30">
+```
+
+#### Button Variants
+```tsx
+// Primary Action Button
+<Button className="bg-gradient-primary text-primary-foreground shadow-glow hover:shadow-elevated hover:scale-105">
+
+// Category Buttons
+<Button variant="music" className="bg-gradient-music text-music-foreground shadow-md hover:shadow-lg hover:scale-105">
+<Button variant="image" className="bg-gradient-image text-image-foreground shadow-md hover:shadow-lg hover:scale-105">
+<Button variant="code" className="bg-gradient-code text-code-foreground shadow-md hover:shadow-lg hover:scale-105">
+<Button variant="text" className="bg-gradient-text text-text-foreground shadow-md hover:shadow-lg hover:scale-105">
+
+// Glass Effect Button
+<Button variant="glass" className="bg-gradient-glass backdrop-blur-sm border border-white/10 text-foreground hover:bg-white/10">
+```
+
+#### Badge System
+```tsx
+// Category Badges
+<Badge variant="music" className="flex items-center gap-1">
+  <Music className="h-3 w-3" />
+  Music Prompt
+</Badge>
+
+// Status Badges
+<Badge className="bg-gradient-primary text-primary-foreground animate-glow-pulse">
+  <Sparkles className="h-3 w-3 mr-1" />
+  Premium
+</Badge>
+
+// Featured Badge
+<Badge className="absolute top-3 left-3 bg-gradient-to-r from-purple-500 to-pink-500">
+  Featured
+</Badge>
+```
+
+### Animation & Interaction Guidelines
+
+#### Hover Effects
+```css
+/* Card Hover Pattern */
+.card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.card-hover:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-elevated);
+  border-color: hsl(var(--primary) / 0.2);
+}
+
+/* Image Hover in Cards */
+.image-hover {
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.image-hover:hover {
+  transform: scale(1.1);
+}
+```
+
+#### Keyframe Animations
+```css
+/* Fade In Animation */
+@keyframes fade-in {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Scale In Animation */
+@keyframes scale-in {
+  0% { transform: scale(0.95); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Glow Pulse for Premium Elements */
+@keyframes glow-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+/* Float Animation for Hero Elements */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+```
+
+### Shadow & Depth System
+```css
+/* Shadow Hierarchy */
+--shadow-glow: 0 0 40px hsl(var(--primary) / 0.3);           /* Glowing primary buttons */
+--shadow-card: 0 8px 32px hsl(220 27% 4% / 0.4);             /* Standard card elevation */
+--shadow-elevated: 0 16px 64px hsl(220 27% 4% / 0.6);        /* Hover/focus elevation */
+
+/* Glass Morphism Effects */
+backdrop-blur-sm   /* Light blur for overlays */
+backdrop-blur-md   /* Medium blur for modals */
+bg-background/80   /* Semi-transparent backgrounds */
+border border-white/10  /* Subtle borders on glass elements */
+```
+
+### Layout & Grid Patterns
+```tsx
+// Standard Grid Layouts
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+  {/* Responsive prompt/card grid */}
+</div>
+
+// Hero Section Layout
+<section className="py-16 px-4 text-center">
+  <div className="container mx-auto max-w-4xl">
+    {/* Centered hero content */}
+  </div>
+</section>
+
+// Dashboard Layout
+<div className="container py-12">
+  <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+    <div className="lg:col-span-3">{/* Main content */}</div>
+    <div className="lg:col-span-1">{/* Sidebar */}</div>
+  </div>
+</div>
+```
+
+### Icon Usage Guidelines
+```tsx
+// Lucide Icons - Consistent sizing
+<Music className="w-4 h-4" />      /* Small icons in text */
+<Image className="w-5 h-5" />      /* Medium icons in buttons */
+<Code className="w-6 h-6" />       /* Large icons in headers */
+<Type className="w-8 h-8" />       /* Hero/feature icons */
+
+// Icon Colors match categories
+<Music className="w-4 h-4 text-music" />
+<Image className="w-4 h-4 text-image" />
+<Code className="w-4 h-4 text-code" />
+<Type className="w-4 h-4 text-text" />
+```
+
+### Mobile-First Responsive Patterns
+```tsx
+// Mobile Navigation
+<nav className="fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-md border-t md:hidden">
+  {/* Bottom tab navigation */}
+</nav>
+
+// Responsive Grids
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+
+// Mobile Modals
+<Dialog className="sm:max-w-lg">
+  {/* Mobile-friendly modal sizing */}
+</Dialog>
+
+// Touch-Friendly Sizing
+<Button size="lg" className="h-12 px-6 md:h-10 md:px-4">
+  {/* Larger touch targets on mobile */}
+</Button>
+```
+
+### Content-Specific Styling
+
+#### Prompt Cards
+- Aspect ratio: 16:9 for cover images
+- Hover effects: Scale (1.05), glow shadow, border highlight
+- Category color coding through gradients and badges
+- Glass morphism overlays for controls
+- Premium badges with glow animation
+
+#### Artist Pages
+- Large banner with parallax effects
+- Gallery grid with hover zoom
+- Dynamic background colors from cover art
+- Music player with waveform visualization
+- Follower counts and social proof
+
+#### Lab Assets
+- Technical specifications display
+- GPU requirements badges
+- Download progress indicators
+- Preview thumbnails with play buttons
+- Price display with Stripe integration
+
+### Accessibility Requirements
+```css
+/* Focus States */
+.focus-visible {
+  outline: 2px solid hsl(var(--primary));
+  outline-offset: 2px;
+}
+
+/* Color Contrast */
+/* All text must meet WCAG AA standards */
+/* Use --foreground for primary text */
+/* Use --muted-foreground for secondary text */
+
+/* Motion Preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+```
+
+### Performance Guidelines
+- Use `transform` and `opacity` for animations (GPU-accelerated)
+- Implement lazy loading for images and heavy components
+- Use skeleton loading states during data fetching
+- Optimize images with proper `srcset` attributes
+- Minimize layout shifts with aspect ratio containers
+
+## Style Implementation Rules
+
+1. **Consistency First**: Always use defined color variables, never hardcode colors
+2. **Category Coherence**: Each prompt type (music/image/code/text) must use its designated color scheme
+3. **Animation Harmony**: All transitions use cubic-bezier timing functions for smooth, cohesive motion
+4. **Mobile Priority**: Every component must work flawlessly on touch devices
+5. **Glass Effects**: Use backdrop-blur sparingly for premium overlay effects
+6. **Gradient Usage**: Apply gradients to CTAs, category elements, and premium features
+7. **Shadow Hierarchy**: Follow the three-tier shadow system (glow/card/elevated)
+8. **Border Radius**: Maintain consistent rounded design language throughout
+
 ## Remember
 
 - Every page must be interconnected (no dead ends)
-- Mobile-first responsive design
-- Accessibility compliance (WCAG AA)
-- Production-ready code quality
-- Comprehensive error handling
-- Performance optimization
-- Security best practices
-- User experience focus
+- Mobile-first responsive design with consistent style system
+- Accessibility compliance (WCAG AA) with proper focus states
+- Production-ready code quality with performance optimization
+- Comprehensive error handling with user-friendly messaging
+- Security best practices with proper authentication flows
+- User experience focus with smooth, delightful interactions
+- **STYLE CONSISTENCY**: Always follow the established design system and color palette
 
-This is a commercial SaaS platform - treat it with production-grade standards and attention to detail.
+This is a commercial SaaS platform - treat it with production-grade standards and attention to visual and interactive detail. Every new component should seamlessly integrate with the existing design language.
