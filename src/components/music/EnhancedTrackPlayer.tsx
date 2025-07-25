@@ -449,4 +449,6 @@ const EnhancedTrackPlayer: React.FC<EnhancedTrackPlayerProps> = ({
             )}
         </div>
     );
-}
+};
+
+export default EnhancedTrackPlayer;
