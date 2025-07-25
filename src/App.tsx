@@ -9,9 +9,12 @@ import ArtistDetail from "./pages/ArtistDetail";
 import Artists from "./pages/Artists";
 import Auth from "./pages/Auth";
 import CategoryFilter from "./pages/CategoryFilter";
+import Community from "./pages/Community";
 import Contact from "./pages/Contact";
+import CookiePolicy from "./pages/CookiePolicy";
 import CreateMusicPrompt from "./pages/CreateMusicPrompt";
 import Dashboard from "./pages/Dashboard";
+import Documentation from "./pages/Documentation";
 import Explore from "./pages/Explore";
 import HelpCenter from "./pages/HelpCenter";
 import Index from "./pages/Index";
@@ -20,8 +23,10 @@ import ModelDetail from "./pages/ModelDetail";
 import MusicPrompts from "./pages/MusicPrompts";
 import NotFound from "./pages/NotFound";
 import Pricing from "./pages/Pricing";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 import PromptDetail from "./pages/PromptDetail";
 import SignOut from "./pages/SignOut";
+import TermsOfService from "./pages/TermsOfService";
 import UserProfile from "./pages/UserProfile";
 import WorkflowDetail from "./pages/WorkflowDetail";
 import AdminArtists from "./pages/admin/Artists";
@@ -33,6 +38,9 @@ import AudioCreation from "./pages/lab/AudioCreation";
 import CodeGeneration from "./pages/lab/CodeGeneration";
 import ImageGeneration from "./pages/lab/ImageGeneration";
 import VideoProcessing from "./pages/lab/VideoProcessing";
+import CodePrompts from "./pages/prompts/CodePrompts";
+import ImagePrompts from "./pages/prompts/ImagePrompts";
+import TextPrompts from "./pages/prompts/TextPrompts";
 import ModelUpload from "./pages/upload/ModelUpload";
 import PackUpload from "./pages/upload/PackUpload";
 import WorkflowUpload from "./pages/upload/WorkflowUpload";
@@ -54,6 +62,11 @@ const App = () => (
                         <Route path="/pricing" element={<Pricing />} />
                         <Route path="/contact" element={<Contact />} />
                         <Route path="/help" element={<HelpCenter />} />
+                        <Route path="/docs" element={<Documentation />} />
+                        <Route path="/community" element={<Community />} />
+                        <Route path="/prompts/image" element={<ImagePrompts />} />
+                        <Route path="/prompts/code" element={<CodePrompts />} />
+                        <Route path="/prompts/text" element={<TextPrompts />} />
                         <Route path="/auth/*" element={<Auth />} />
                         <Route path="/sign-out" element={<SignOut />} />
                         <Route
@@ -127,6 +140,9 @@ const App = () => (
                         <Route path="/ai-models" element={<AIModels />} />
                         <Route path="/music-prompts" element={<MusicPrompts />} />
                         <Route path="/create-music-prompt" element={<CreateMusicPrompt />} />
+                        <Route path="/privacy" element={<PrivacyPolicy />} />
+                        <Route path="/terms" element={<TermsOfService />} />
+                        <Route path="/cookies" element={<CookiePolicy />} />
                         <Route path="/:username" element={<UserProfile />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
