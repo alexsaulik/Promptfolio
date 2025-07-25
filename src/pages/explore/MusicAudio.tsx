@@ -186,7 +186,7 @@ const MusicAudio = () => {
                         {/* Prompts Grid */}
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                             {musicPrompts.map((prompt, index) => (
-                                <div key={prompt.id} className="animate-fade-in" style={{ animationDelay: `${index * 100}ms` }}>
+                                <div key={prompt.id} className={`animate-fade-in delay-${index + 1}`}>
                                     <PromptCard prompt={prompt} />
                                 </div>
                             ))}

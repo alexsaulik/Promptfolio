@@ -335,12 +335,14 @@ RESEND_API_KEY=
 ## Promptfolio Design System & Style Guidelines
 
 ### Brand Identity & Aesthetic
+
 - **Design Philosophy**: Creative, premium, clean (Notion + Figma + SoundCloud hybrid)
 - **Target Feel**: Gallery-quality display for designers, artists, and musicians
 - **Visual Hierarchy**: Content-first with clear information architecture
 - **Brand Personality**: Professional, innovative, creator-focused, community-driven
 
 ### Color System (HSL Format)
+
 ```css
 /* Dark Mode First - Primary Theme */
 --background: 220 27% 8%;           /* Deep charcoal background */
@@ -365,6 +367,7 @@ RESEND_API_KEY=
 ```
 
 ### Gradient System
+
 ```css
 /* Premium Gradients for Visual Impact */
 --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
@@ -376,6 +379,7 @@ RESEND_API_KEY=
 ```
 
 ### Typography Scale
+
 ```css
 /* Font System */
 Font Family: Inter or Space Grotesk (system fallback)
@@ -396,6 +400,7 @@ Font Weights:
 ```
 
 ### Spacing & Layout System
+
 ```css
 /* Consistent Spacing Scale */
 Spacing: 0.25rem increments (4px base)
@@ -420,6 +425,7 @@ Spacing: 0.25rem increments (4px base)
 ### Component Design Patterns
 
 #### Card Components
+
 ```tsx
 // Standard Card Pattern
 <Card className="group relative overflow-hidden rounded-2xl border-border/50 bg-card/50 backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-elevated hover:border-primary/20 cursor-pointer">
@@ -431,6 +437,7 @@ Spacing: 0.25rem increments (4px base)
 ```
 
 #### Button Variants
+
 ```tsx
 // Primary Action Button
 <Button className="bg-gradient-primary text-primary-foreground shadow-glow hover:shadow-elevated hover:scale-105">
@@ -446,6 +453,7 @@ Spacing: 0.25rem increments (4px base)
 ```
 
 #### Badge System
+
 ```tsx
 // Category Badges
 <Badge variant="music" className="flex items-center gap-1">
@@ -468,6 +476,7 @@ Spacing: 0.25rem increments (4px base)
 ### Animation & Interaction Guidelines
 
 #### Hover Effects
+
 ```css
 /* Card Hover Pattern */
 .card-hover {
@@ -489,6 +498,7 @@ Spacing: 0.25rem increments (4px base)
 ```
 
 #### Keyframe Animations
+
 ```css
 /* Fade In Animation */
 @keyframes fade-in {
@@ -516,6 +526,7 @@ Spacing: 0.25rem increments (4px base)
 ```
 
 ### Shadow & Depth System
+
 ```css
 /* Shadow Hierarchy */
 --shadow-glow: 0 0 40px hsl(var(--primary) / 0.3);           /* Glowing primary buttons */
@@ -530,6 +541,7 @@ border border-white/10  /* Subtle borders on glass elements */
 ```
 
 ### Layout & Grid Patterns
+
 ```tsx
 // Standard Grid Layouts
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -553,6 +565,7 @@ border border-white/10  /* Subtle borders on glass elements */
 ```
 
 ### Icon Usage Guidelines
+
 ```tsx
 // Lucide Icons - Consistent sizing
 <Music className="w-4 h-4" />      /* Small icons in text */
@@ -568,6 +581,7 @@ border border-white/10  /* Subtle borders on glass elements */
 ```
 
 ### Mobile-First Responsive Patterns
+
 ```tsx
 // Mobile Navigation
 <nav className="fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-md border-t md:hidden">
@@ -591,6 +605,7 @@ border border-white/10  /* Subtle borders on glass elements */
 ### Content-Specific Styling
 
 #### Prompt Cards
+
 - Aspect ratio: 16:9 for cover images
 - Hover effects: Scale (1.05), glow shadow, border highlight
 - Category color coding through gradients and badges
@@ -598,6 +613,7 @@ border border-white/10  /* Subtle borders on glass elements */
 - Premium badges with glow animation
 
 #### Artist Pages
+
 - Large banner with parallax effects
 - Gallery grid with hover zoom
 - Dynamic background colors from cover art
@@ -605,6 +621,7 @@ border border-white/10  /* Subtle borders on glass elements */
 - Follower counts and social proof
 
 #### Lab Assets
+
 - Technical specifications display
 - GPU requirements badges
 - Download progress indicators
@@ -612,6 +629,7 @@ border border-white/10  /* Subtle borders on glass elements */
 - Price display with Stripe integration
 
 ### Accessibility Requirements
+
 ```css
 /* Focus States */
 .focus-visible {
@@ -635,6 +653,7 @@ border border-white/10  /* Subtle borders on glass elements */
 ```
 
 ### Performance Guidelines
+
 - Use `transform` and `opacity` for animations (GPU-accelerated)
 - Implement lazy loading for images and heavy components
 - Use skeleton loading states during data fetching

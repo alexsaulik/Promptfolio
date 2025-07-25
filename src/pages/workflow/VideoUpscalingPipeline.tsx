@@ -1,4 +1,5 @@
-import videoUpscaling from "@/assets/video-upscaling.jpg";
+// Using Unsplash URL for placeholder image
+const videoUpscaling = "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800&h=600&fit=crop";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { Badge } from "@/components/ui/badge";

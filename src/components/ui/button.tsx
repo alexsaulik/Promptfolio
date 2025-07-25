@@ -9,21 +9,18 @@ const buttonVariants = cva(
     {
         variants: {
             variant: {
-                default: "bg-gradient-primary text-primary-foreground shadow-glow hover:shadow-elevated hover:scale-105",
-                destructive:
-                    "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-                outline:
-                    "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
-                secondary:
-                    "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+                default: "bg-gradient-to-r from-primary to-primary-glow text-primary-foreground shadow-glow hover:shadow-elevated hover:scale-105",
+                destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+                outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+                secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
                 ghost: "hover:bg-accent hover:text-accent-foreground",
                 link: "text-primary underline-offset-4 hover:underline",
-                hero: "bg-gradient-primary text-primary-foreground shadow-glow hover:shadow-elevated hover:scale-105 text-base font-semibold",
-                music: "bg-gradient-music text-music-foreground shadow-md hover:shadow-lg hover:scale-105",
-                image: "bg-gradient-image text-image-foreground shadow-md hover:shadow-lg hover:scale-105",
-                code: "bg-gradient-code text-code-foreground shadow-md hover:shadow-lg hover:scale-105",
-                text: "bg-gradient-text text-text-foreground shadow-md hover:shadow-lg hover:scale-105",
-                glass: "bg-gradient-glass backdrop-blur-sm border border-white/10 text-foreground hover:bg-white/10",
+                hero: "bg-gradient-to-r from-primary to-primary-glow text-primary-foreground shadow-glow hover:shadow-elevated hover:scale-105 text-base font-semibold",
+                music: "bg-gradient-to-r from-music to-music/80 text-music-foreground shadow-md hover:shadow-lg hover:scale-105",
+                image: "bg-gradient-to-r from-image to-image/80 text-image-foreground shadow-md hover:shadow-lg hover:scale-105",
+                code: "bg-gradient-to-r from-code to-code/80 text-code-foreground shadow-md hover:shadow-lg hover:scale-105",
+                text: "bg-gradient-to-r from-text to-text/80 text-text-foreground shadow-md hover:shadow-lg hover:scale-105",
+                glass: "bg-gradient-to-r from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-white/10 text-foreground hover:bg-white/10",
             },
             size: {
                 default: "h-10 px-4 py-2",
@@ -61,3 +58,4 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 Button.displayName = "Button"
 
 export { Button, buttonVariants }
+

@@ -1,6 +1,7 @@
-import comfyuiPortrait from "@/assets/comfyui-portrait.jpg";
-import musicProduction from "@/assets/music-production.jpg";
-import videoUpscaling from "@/assets/video-upscaling.jpg";
+// Using Unsplash URLs for placeholder images
+const comfyuiPortrait = "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=600&fit=crop";
+const musicProduction = "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=800&h=600&fit=crop";
+const videoUpscaling = "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800&h=600&fit=crop";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { Badge } from "@/components/ui/badge";

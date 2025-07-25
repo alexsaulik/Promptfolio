@@ -1,4 +1,3 @@
-import heroBanner from "@/assets/hero-banner.jpg";
 import { Button } from "@/components/ui/button";
 import { Sparkles, TrendingUp, Users, Zap } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -7,37 +6,33 @@ export function HeroSection() {
     const navigate = useNavigate();
 
     return (
-        <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
-            {/* Background Image */}
+        <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary/20 via-background to-primary/10">
+            {/* Background Gradient */}
             <div className="absolute inset-0 z-0">
-                <img
-                    src={heroBanner}
-                    alt="Promptfolio Hero"
-                    className="w-full h-full object-cover opacity-40"
-                />
-                <div className="absolute inset-0 bg-gradient-to-br from-background/80 via-background/60 to-background/80" />
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-background to-primary/10" />
+                <div className="absolute inset-0 bg-gradient-to-tr from-music/10 via-transparent to-code/10" />
             </div>
 
             {/* Floating Elements */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute top-20 left-10 animate-float">
-                    <div className="h-16 w-16 bg-gradient-music rounded-lg opacity-60 blur-sm" />
+                    <div className="h-16 w-16 bg-gradient-to-br from-music to-music/60 rounded-lg opacity-60 blur-sm" />
                 </div>
                 <div className="absolute top-40 right-20 animate-float [animation-delay:1s]">
-                    <div className="h-12 w-12 bg-gradient-code rounded-full opacity-70 blur-sm" />
+                    <div className="h-12 w-12 bg-gradient-to-br from-code to-code/60 rounded-full opacity-70 blur-sm" />
                 </div>
                 <div className="absolute bottom-32 left-1/4 animate-float [animation-delay:2s]">
-                    <div className="h-20 w-20 bg-gradient-image rounded-2xl opacity-50 blur-sm" />
+                    <div className="h-20 w-20 bg-gradient-to-br from-image to-image/60 rounded-2xl opacity-50 blur-sm" />
                 </div>
                 <div className="absolute bottom-20 right-1/3 animate-float [animation-delay:0.5s]">
-                    <div className="h-14 w-14 bg-gradient-text rounded-lg opacity-60 blur-sm" />
+                    <div className="h-14 w-14 bg-gradient-to-br from-text to-text/60 rounded-lg opacity-60 blur-sm" />
                 </div>
             </div>
 
             {/* Content */}
             <div className="relative z-10 container mx-auto px-4 text-center space-y-8">
                 <div className="space-y-4 animate-fade-in">
-                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold bg-gradient-primary bg-clip-text text-transparent leading-tight">
+                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-primary via-primary-glow to-primary bg-clip-text text-transparent leading-tight">
                         Your Creative Prompt
                         <br />
                         <span className="bg-gradient-to-r from-music via-image to-code bg-clip-text text-transparent">

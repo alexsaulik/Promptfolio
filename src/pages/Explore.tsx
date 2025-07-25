@@ -201,7 +201,7 @@ const Explore = () => {
                                     : 'space-y-4'
                                 }>
                                     {prompts.map((prompt, index) => (
-                                        <div key={prompt.id} className={`animate-fade-in`} style={{ animationDelay: `${index * 100}ms` }}>
+                                        <div key={prompt.id} className={`animate-fade-in animate-delay-${index}`}>
                                             {viewMode === 'grid' ? (
                                                 <PromptCard prompt={prompt} />
                                             ) : (

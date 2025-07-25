@@ -1,4 +1,5 @@
-import musicProduction from "@/assets/music-production.jpg";
+// Using Unsplash URL for placeholder image
+const musicProduction = "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=800&h=600&fit=crop";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { Badge } from "@/components/ui/badge";

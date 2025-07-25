@@ -1,4 +1,5 @@
-import comfyuiPortrait from "@/assets/comfyui-portrait.jpg";
+// Using Unsplash URL for placeholder image
+const comfyuiPortrait = "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=600&fit=crop";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { Badge } from "@/components/ui/badge";
