@@ -17,6 +17,7 @@ import Labs from "./pages/Labs";
 import ModelDetail from "./pages/ModelDetail";
 import MusicPrompts from "./pages/MusicPrompts";
 import NotFound from "./pages/NotFound";
+import Pricing from "./pages/Pricing";
 import PromptDetail from "./pages/PromptDetail";
 import SignOut from "./pages/SignOut";
 import UserProfile from "./pages/UserProfile";
@@ -48,6 +49,7 @@ const App = () => (
                 <BrowserRouter>
                     <Routes>
                         <Route path="/" element={<Index />} />
+                        <Route path="/pricing" element={<Pricing />} />
                         <Route path="/auth/*" element={<Auth />} />
                         <Route path="/sign-out" element={<SignOut />} />
                         <Route
