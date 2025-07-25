@@ -9,6 +9,7 @@ import ArtistDetail from "./pages/ArtistDetail";
 import Artists from "./pages/Artists";
 import Auth from "./pages/Auth";
 import CategoryFilter from "./pages/CategoryFilter";
+import Contact from "./pages/Contact";
 import CreateMusicPrompt from "./pages/CreateMusicPrompt";
 import Dashboard from "./pages/Dashboard";
 import Explore from "./pages/Explore";
@@ -50,6 +51,7 @@ const App = () => (
                     <Routes>
                         <Route path="/" element={<Index />} />
                         <Route path="/pricing" element={<Pricing />} />
+                        <Route path="/contact" element={<Contact />} />
                         <Route path="/auth/*" element={<Auth />} />
                         <Route path="/sign-out" element={<SignOut />} />
                         <Route
