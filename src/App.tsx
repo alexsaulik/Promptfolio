@@ -13,6 +13,7 @@ import Contact from "./pages/Contact";
 import CreateMusicPrompt from "./pages/CreateMusicPrompt";
 import Dashboard from "./pages/Dashboard";
 import Explore from "./pages/Explore";
+import HelpCenter from "./pages/HelpCenter";
 import Index from "./pages/Index";
 import Labs from "./pages/Labs";
 import ModelDetail from "./pages/ModelDetail";
@@ -52,6 +53,7 @@ const App = () => (
                         <Route path="/" element={<Index />} />
                         <Route path="/pricing" element={<Pricing />} />
                         <Route path="/contact" element={<Contact />} />
+                        <Route path="/help" element={<HelpCenter />} />
                         <Route path="/auth/*" element={<Auth />} />
                         <Route path="/sign-out" element={<SignOut />} />
                         <Route
