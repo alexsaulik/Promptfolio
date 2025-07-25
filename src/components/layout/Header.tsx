@@ -54,6 +54,9 @@ export function Header() {
                     <Link to="/artists" className="text-sm font-medium hover:text-primary transition-colors">
                         Artists
                     </Link>
+                    <Link to="/music-studio" className="text-sm font-medium hover:text-primary transition-colors">
+                        Music Studio
+                    </Link>
                     {isSignedIn && (
                         <Link to="/dashboard" className="text-sm font-medium hover:text-primary transition-colors">
                             Dashboard
@@ -169,6 +172,22 @@ export function Header() {
                             >
                                 <Beaker className="h-4 w-4" />
                                 <span>Lab</span>
+                            </Link>
+                            <Link
+                                to="/artists"
+                                className="flex items-center space-x-2 text-sm font-medium hover:text-primary transition-colors p-2"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                                <User className="h-4 w-4" />
+                                <span>Artists</span>
+                            </Link>
+                            <Link
+                                to="/music-studio"
+                                className="flex items-center space-x-2 text-sm font-medium hover:text-primary transition-colors p-2"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                                <Sparkles className="h-4 w-4" />
+                                <span>Music Studio</span>
                             </Link>
                             <Link
                                 to="/dashboard"

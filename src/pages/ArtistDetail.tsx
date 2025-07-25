@@ -1,5 +1,6 @@
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
+import EnhancedTrackPlayer from "@/components/music/EnhancedTrackPlayer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -13,7 +14,6 @@ import {
   Heart,
   MapPin,
   Music,
-  Pause,
   Play,
   Share2,
   Users,
@@ -40,8 +40,23 @@ interface Artist {
 interface Track {
   id: string;
   title: string;
-  mp3_url: string;
+  artist: string;
+  mp3Url?: string;
+  mp3_url?: string; // legacy field for compatibility
+  coverImageUrl?: string;
+  lyrics?: string;
+  prompt?: string;
+  genre?: string[];
+  mood?: string[];
+  bpm?: number;
+  key?: string;
+  voice?: string;
+  instruments?: string;
   duration?: number;
+  plays?: number;
+  likes?: number;
+  downloads?: number;
+  createdAt?: string;
 }
 
 interface Prompt {
@@ -109,22 +124,80 @@ const ArtistDetail = () => {
           .eq('artist_id', artistData.id)
           .order('created_at', { ascending: false });
 
-        if (!tracksError && tracksData) {
-          setTracks(tracksData);
+        if (!tracksError && tracksData && tracksData.length > 0) {
+          // Transform the database tracks to match our interface
+          const transformedTracks: Track[] = tracksData.map(track => ({
+            ...track,
+            artist: enhancedArtist.name,
+            mp3Url: track.mp3_url,
+            createdAt: track.created_at
+          }));
+          setTracks(transformedTracks);
         } else {
-          // Generate sample tracks for demonstration
+          // Generate sample tracks for demonstration with Suno AI data
           const sampleTracks: Track[] = [
             {
               id: '1',
-              title: `${enhancedArtist.name} - Latest Single`,
+              title: 'Poison Kisses',
+              artist: enhancedArtist.name,
               mp3_url: '/placeholder-audio.mp3',
-              duration: 180 + Math.floor(Math.random() * 120)
+              mp3Url: '/placeholder-audio.mp3',
+              duration: 203,
+              coverImageUrl: '/api/placeholder/800/300',
+              lyrics: `[#instr: Soft, haunting guitar picking, deep bass hums underneath, slow-building drum groove.]
+(Mmm… yeah…) (I know I should walk away… but I don't…)
+
+[#instr: Verse 1 – Intimate, smooth delivery, words almost whispered.]
+"You got a habit of pullin' me under,
+Eyes like a drug, got me lost in your thunder.
+A taste of your lips, and I'm halfway to gone,
+Every time I leave, you pull me back in your arms."
+
+"You wear your love like a switchblade to the chest,
+Tell me it's real, then you leave me a mess.
+Your touch is fire, your heart is cold,
+Still, I keep comin' back like I lost my soul."
+
+[#instr: Pre-Chorus – Beat strips back, vocals take center stage, slow tension build.]
+(Maybe I like the way you hurt me…)
+(Maybe I crave the way you burn me…)
+(Maybe I never wanna break free…)
+
+[#instr: Full-band drop—moody drums, heavy bass groove, layered guitars swelling in.]
+(Poison kisses, venom in my veins…)
+(I should know better, but I love the pain…)
+(You pull me under, say my name…)
+(Wrapped in your chains, but I stay the same…)`,
+              prompt: `[#gen: alternative rock, dark pop r&b, cinematic, #mood: moody, seductive, reckless, #bpm: 95, #key: A Minor, #voice: smooth, melancholic vocals, subtle falsetto, hypnotic delivery]
+
+[#instr: Soft, haunting guitar picking, deep bass hums underneath, slow-building drum groove.]
+(Mmm… yeah…) (I know I should walk away… but I don't…)
+
+"You got a habit of pullin' me under,
+Eyes like a drug, got me lost in your thunder."`,
+              genre: ["alternative rock", "dark pop", "r&b", "cinematic"],
+              mood: ["moody", "seductive", "reckless"],
+              bpm: 95,
+              key: "A Minor",
+              voice: "smooth, melancholic vocals, subtle falsetto, hypnotic delivery",
+              instruments: "Soft, haunting guitar picking, deep bass hums underneath, slow-building drum groove",
+              plays: 1247,
+              likes: 89,
+              downloads: 34,
+              createdAt: "2025-01-15T10:30:00Z"
             },
             {
               id: '2',
-              title: `Experimental ${enhancedArtist.genre[0]}`,
+              title: `Experimental ${enhancedArtist.genre[0] || 'Electronic'}`,
+              artist: enhancedArtist.name,
               mp3_url: '/placeholder-audio.mp3',
-              duration: 150 + Math.floor(Math.random() * 180)
+              mp3Url: '/placeholder-audio.mp3',
+              duration: 180 + Math.floor(Math.random() * 120),
+              genre: enhancedArtist.genre || ["experimental"],
+              plays: 823,
+              likes: 56,
+              downloads: 21,
+              createdAt: "2025-01-12T14:20:00Z"
             }
           ];
           setTracks(sampleTracks);
@@ -547,44 +620,25 @@ const ArtistDetail = () => {
         {/* Tracks Section */}
         {tracks.length > 0 && (
           <section className="space-y-6">
-            <h2 className="text-3xl font-bold">Latest Tracks</h2>
-            <div className="space-y-2">
-              {tracks.map((track, index) => (
-                <Card key={track.id} className="group hover:shadow-lg transition-all duration-300">
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-4">
-                      <Button
-                        size="icon"
-                        variant={currentTrack === track.id && isPlaying ? "default" : "outline"}
-                        onClick={() => playTrack(track.mp3_url, track.id)}
-                        className="flex-shrink-0"
-                      >
-                        {currentTrack === track.id && isPlaying ? (
-                          <Pause className="w-4 h-4" />
-                        ) : (
-                          <Play className="w-4 h-4" />
-                        )}
-                      </Button>
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-red-500 via-purple-500 to-blue-500 bg-clip-text text-transparent animate-glow-pulse hover:scale-105 transition-transform duration-300 cursor-pointer">
+              Latest Tracks
+            </h2>
+            <div className="space-y-6">
+              {tracks.map((track) => {
+                // Ensure mp3Url is set for compatibility
+                const trackData = {
+                  ...track,
+                  mp3Url: track.mp3Url || track.mp3_url || '/placeholder-audio.mp3'
+                };
 
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <h3 className="font-semibold group-hover:text-purple-400 transition-colors">
-                              {track.title}
-                            </h3>
-                            <p className="text-sm text-muted-foreground">
-                              Track {index + 1} • {formatDuration(track.duration)}
-                            </p>
-                          </div>
-                          <Button size="sm" variant="ghost">
-                            <Download className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                return (
+                  <EnhancedTrackPlayer
+                    key={track.id}
+                    track={trackData}
+                    showFullDetails={true}
+                  />
+                );
+              })}
             </div>
           </section>
         )}

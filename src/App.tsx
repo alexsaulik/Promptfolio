@@ -21,6 +21,7 @@ import Index from "./pages/Index";
 import Labs from "./pages/Labs";
 import ModelDetail from "./pages/ModelDetail";
 import MusicPrompts from "./pages/MusicPrompts";
+import MusicStudio from "./pages/MusicStudio";
 import NotFound from "./pages/NotFound";
 import Pricing from "./pages/Pricing";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
@@ -146,6 +147,7 @@ const App = () => (
                         <Route path="/model/:slug" element={<ModelDetail />} />
                         <Route path="/ai-models" element={<AIModels />} />
                         <Route path="/music-prompts" element={<MusicPrompts />} />
+                        <Route path="/music-studio" element={<MusicStudio />} />
                         <Route path="/create-music-prompt" element={<CreateMusicPrompt />} />
                         <Route path="/privacy" element={<PrivacyPolicy />} />
                         <Route path="/terms" element={<TermsOfService />} />
