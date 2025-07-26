@@ -1,3 +1,4 @@
+import { AIAssistantWidget } from "@/components/AIAssistantWidget";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { MobileFloatingDock } from "@/components/layout/MobileFloatingDock";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -20,6 +21,7 @@ import Explore from "./pages/Explore";
 import HelpCenter from "./pages/HelpCenter";
 import Index from "./pages/Index";
 import Labs from "./pages/Labs";
+import LocalAI from "./pages/LocalAI";
 import ModelDetail from "./pages/ModelDetail";
 import MusicPrompts from "./pages/MusicPrompts";
 import MusicStudio from "./pages/MusicStudio";
@@ -101,6 +103,7 @@ const App = () => (
                         <Route path="/lab/workflows" element={<ComfyUIWorkflows />} />
                         <Route path="/lab/packs" element={<CreativePacks />} />
                         <Route path="/lab/models" element={<AIModelsHub />} />
+                        <Route path="/lab/local-ai" element={<LocalAI />} />
                         <Route path="/lab/install" element={<InstallationGuide />} />
                         <Route path="/explore" element={<Explore />} />
                         <Route path="/explore/music-audio" element={<MusicAudio />} />
@@ -161,6 +164,7 @@ const App = () => (
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                     <MobileFloatingDock />
+                    <AIAssistantWidget />
                 </BrowserRouter>
             </TooltipProvider>
         </QueryClientProvider>

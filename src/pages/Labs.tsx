@@ -325,7 +325,7 @@ const Labs = () => {
                         </div>
 
                         {/* Featured Tools Grid */}
-                        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6">
                             <Card className="text-center hover:shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer" onClick={() => navigate('/lab/image-generation')}>
                                 <CardContent className="pt-8">
                                     <div className="text-4xl mb-3">🎨</div>
@@ -355,6 +355,15 @@ const Labs = () => {
                                     <div className="text-4xl mb-3">🎬</div>
                                     <h3 className="font-semibold mb-2">Video Processing</h3>
                                     <p className="text-sm text-muted-foreground">RunwayML, Pika Labs</p>
+                                </CardContent>
+                            </Card>
+
+                            <Card className="text-center hover:shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer border-green-200 dark:border-green-800 bg-green-50/50 dark:bg-green-950/20" onClick={() => navigate('/lab/local-ai')}>
+                                <CardContent className="pt-8">
+                                    <div className="text-4xl mb-3">🧠</div>
+                                    <h3 className="font-semibold mb-2 text-green-700 dark:text-green-300">Local AI</h3>
+                                    <p className="text-sm text-green-600 dark:text-green-400">Llama, Ollama, Private</p>
+                                    <Badge className="mt-2 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">NEW</Badge>
                                 </CardContent>
                             </Card>
                         </div>

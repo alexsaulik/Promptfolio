@@ -1,0 +1,429 @@
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Progress } from "@/components/ui/progress";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
+import { KnowledgeBase, useDocumentKnowledge } from '@/hooks/use-document-knowledge';
+import { toast } from "@/hooks/use-toast";
+import DocumentChat from './DocumentChat';
+import {
+    BookOpen,
+    ChevronRight,
+    Database,
+    File,
+    FileIcon,
+    FileSpreadsheet,
+    FileText,
+    Loader2,
+    MessageSquare,
+    Plus,
+    Search,
+    Trash2,
+    Upload
+} from 'lucide-react';
+import { useCallback, useState } from 'react';
+
+interface DocumentKnowledgeManagerProps {
+    onKnowledgeSelect?: (knowledgeBase: KnowledgeBase | null) => void;
+    className?: string;
+}
+
+export const DocumentKnowledgeManager = ({ onKnowledgeSelect, className }: DocumentKnowledgeManagerProps) => {
+    const {
+        knowledgeBases,
+        isProcessing,
+        uploadProgress,
+        processFiles,
+        searchKnowledge,
+        buildDocumentContext,
+        setKnowledgeBases
+    } = useDocumentKnowledge();
+
+    const [selectedKnowledgeBase, setSelectedKnowledgeBase] = useState<KnowledgeBase | null>(null);
+    const [isChatDialogOpen, setIsChatDialogOpen] = useState(false);
+    const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [isDragOver, setIsDragOver] = useState(false);
+    const [newKbName, setNewKbName] = useState('');
+    const [newKbDescription, setNewKbDescription] = useState('');
+
+    // Load knowledge bases on mount
+    useState(() => {
+        loadKnowledgeBases();
+    });
+
+    // Get file icon
+    const getFileIcon = (type: string) => {
+        switch (type) {
+            case 'pdf':
+                return <FileText className="w-4 h-4 text-red-500" />;
+            case 'docx':
+                return <File className="w-4 h-4 text-blue-500" />;
+            case 'txt':
+            case 'md':
+                return <FileText className="w-4 h-4 text-gray-500" />;
+            case 'json':
+                return <FileIcon className="w-4 h-4 text-yellow-500" />;
+            case 'csv':
+                return <FileSpreadsheet className="w-4 h-4 text-green-500" />;
+            default:
+                return <FileIcon className="w-4 h-4 text-gray-400" />;
+        }
+    };
+
+    // Format file size
+    const formatFileSize = (bytes: number): string => {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    };
+
+    // Handle file upload
+    const handleFileUpload = async (files: FileList | null, knowledgeBaseId: string) => {
+        if (!files) return;
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const supportedTypes = ['pdf', 'docx', 'txt', 'md', 'json', 'csv'];
+            const fileType = file.name.split('.').pop()?.toLowerCase();
+
+            if (!fileType || !supportedTypes.includes(fileType)) {
+                toast({
+                    title: "Unsupported File",
+                    description: `${file.name} is not supported. Supported: PDF, DOCX, TXT, MD, JSON, CSV`,
+                    variant: "destructive"
+                });
+                continue;
+            }
+
+            try {
+                await addDocumentToKnowledgeBase(file, knowledgeBaseId);
+                toast({
+                    title: "Document Added",
+                    description: `${file.name} has been processed and added to the knowledge base`
+                });
+            } catch (error) {
+                toast({
+                    title: "Upload Failed",
+                    description: `Failed to process ${file.name}: ${error instanceof Error ? error.message : 'Unknown error'}`,
+                    variant: "destructive"
+                });
+            }
+        }
+    };
+
+    // Handle drag and drop
+    const handleDragOver = useCallback((e: React.DragEvent) => {
+        e.preventDefault();
+        setIsDragOver(true);
+    }, []);
+
+    const handleDragLeave = useCallback((e: React.DragEvent) => {
+        e.preventDefault();
+        setIsDragOver(false);
+    }, []);
+
+    const handleDrop = useCallback((e: React.DragEvent, knowledgeBaseId: string) => {
+        e.preventDefault();
+        setIsDragOver(false);
+        handleFileUpload(e.dataTransfer.files, knowledgeBaseId);
+    }, []);
+
+    // Handle create knowledge base
+    const handleCreateKnowledgeBase = (formData: FormData) => {
+        const name = formData.get('name') as string;
+        const description = formData.get('description') as string;
+
+        if (!name.trim()) {
+            toast({
+                title: "Error",
+                description: "Knowledge base name is required",
+                variant: "destructive"
+            });
+            return;
+        }
+
+        const newBase = createKnowledgeBase(name.trim(), description.trim());
+        toast({
+            title: "Success",
+            description: `Knowledge base "${name}" created successfully`
+        });
+
+        setIsCreateDialogOpen(false);
+        setSelectedKnowledgeBase(newBase);
+    };
+
+    // Handle search
+    const handleSearch = () => {
+        if (!searchQuery.trim()) return;
+
+        const results = searchKnowledge(searchQuery, selectedKnowledgeBase?.id);
+
+        if (results.length > 0) {
+            toast({
+                title: "Search Results",
+                description: `Found ${results.length} relevant document chunks`
+            });
+        } else {
+            toast({
+                title: "No Results",
+                description: "No relevant documents found for your query"
+            });
+        }
+    };
+
+    return (
+        <div className={className}>
+            <Card>
+                <CardHeader>
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <CardTitle className="flex items-center gap-2">
+                                <Database className="w-5 h-5" />
+                                Document Knowledge
+                            </CardTitle>
+                            <CardDescription>
+                                Upload and manage documents to create AI knowledge bases
+                            </CardDescription>
+                        </div>
+                        <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+                            <DialogTrigger asChild>
+                                <Button>
+                                    <Plus className="w-4 h-4 mr-2" />
+                                    New Knowledge Base
+                                </Button>
+                            </DialogTrigger>
+                            <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle>Create Knowledge Base</DialogTitle>
+                                    <DialogDescription>
+                                        Create a new document collection for your AI to learn from
+                                    </DialogDescription>
+                                </DialogHeader>
+                                <form onSubmit={(e) => {
+                                    e.preventDefault();
+                                    handleCreateKnowledgeBase(new FormData(e.currentTarget));
+                                }}>
+                                    <div className="space-y-4">
+                                        <div>
+                                            <Label htmlFor="name">Name *</Label>
+                                            <Input
+                                                id="name"
+                                                name="name"
+                                                placeholder="e.g., Project Documentation, Research Papers"
+                                                required
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <Label htmlFor="description">Description</Label>
+                                            <Textarea
+                                                id="description"
+                                                name="description"
+                                                placeholder="Describe what documents this knowledge base will contain"
+                                                rows={3}
+                                            />
+                                        </div>
+
+                                        <DialogFooter>
+                                            <Button type="submit">Create Knowledge Base</Button>
+                                        </DialogFooter>
+                                    </div>
+                                </form>
+                            </DialogContent>
+                        </Dialog>
+                    </div>
+                </CardHeader>
+
+                <CardContent>
+                    {/* Processing Indicator */}
+                    {isProcessing && (
+                        <Card className="mb-6 border-primary bg-primary/5">
+                            <CardContent className="p-4">
+                                <div className="flex items-center gap-3 mb-2">
+                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                    <span className="font-medium">Processing Document...</span>
+                                </div>
+                                <Progress value={processingProgress} className="h-2" />
+                                <p className="text-sm text-muted-foreground mt-1">
+                                    {processingProgress}% complete
+                                </p>
+                            </CardContent>
+                        </Card>
+                    )}
+
+                    {/* Search */}
+                    <div className="flex gap-2 mb-6">
+                        <div className="flex-1 relative">
+                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                            <Input
+                                placeholder="Search through your documents..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="pl-10"
+                                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                            />
+                        </div>
+                        <Button onClick={handleSearch} disabled={!searchQuery.trim()}>
+                            Search
+                        </Button>
+                    </div>
+
+                    {/* Knowledge Bases List */}
+                    <div className="space-y-4">
+                        {knowledgeBases.length === 0 ? (
+                            <div className="text-center py-8">
+                                <BookOpen className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+                                <h3 className="text-lg font-medium mb-2">No Knowledge Bases</h3>
+                                <p className="text-muted-foreground mb-4">
+                                    Create your first knowledge base to start uploading documents
+                                </p>
+                                <Button onClick={() => setIsCreateDialogOpen(true)}>
+                                    <Plus className="w-4 h-4 mr-2" />
+                                    Create First Knowledge Base
+                                </Button>
+                            </div>
+                        ) : (
+                            knowledgeBases.map((kb) => (
+                                <Card
+                                    key={kb.id}
+                                    className={`transition-all duration-200 ${selectedKnowledgeBase?.id === kb.id ? 'ring-2 ring-primary' : ''
+                                        } ${isDragOver ? 'border-primary border-dashed' : ''}`}
+                                    onDragOver={handleDragOver}
+                                    onDragLeave={handleDragLeave}
+                                    onDrop={(e) => handleDrop(e, kb.id)}
+                                >
+                                    <CardHeader className="pb-3">
+                                        <div className="flex items-center justify-between">
+                                            <div
+                                                className="flex-1 cursor-pointer"
+                                                onClick={() => {
+                                                    setSelectedKnowledgeBase(kb);
+                                                    onKnowledgeSelect?.(kb);
+                                                }}
+                                            >
+                                                <div className="flex items-center gap-2 mb-1">
+                                                    <BookOpen className="w-5 h-5" />
+                                                    <span className="font-medium">{kb.name}</span>
+                                                    {kb.isActive && (
+                                                        <Badge variant="default" className="text-xs">Active</Badge>
+                                                    )}
+                                                    <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                                                </div>
+                                                <p className="text-sm text-muted-foreground">{kb.description}</p>
+                                            </div>
+
+                                            <div className="flex items-center gap-2">
+                                                <div className="flex items-center gap-1">
+                                                    <Switch
+                                                        checked={kb.isActive}
+                                                        onCheckedChange={() => toggleKnowledgeBase(kb.id)}
+                                                    />
+                                                    <span className="text-xs text-muted-foreground">
+                                                        {kb.isActive ? 'Active' : 'Inactive'}
+                                                    </span>
+                                                </div>
+
+                                                <AlertDialog>
+                                                    <AlertDialogTrigger asChild>
+                                                        <Button variant="ghost" size="sm">
+                                                            <Trash2 className="w-4 h-4" />
+                                                        </Button>
+                                                    </AlertDialogTrigger>
+                                                    <AlertDialogContent>
+                                                        <AlertDialogHeader>
+                                                            <AlertDialogTitle>Delete Knowledge Base</AlertDialogTitle>
+                                                            <AlertDialogDescription>
+                                                                Are you sure you want to delete "{kb.name}"? All documents will be lost.
+                                                            </AlertDialogDescription>
+                                                        </AlertDialogHeader>
+                                                        <div className="flex justify-end space-x-2 mt-4">
+                                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                            <AlertDialogAction onClick={() => deleteKnowledgeBase(kb.id)}>
+                                                                Delete
+                                                            </AlertDialogAction>
+                                                        </div>
+                                                    </AlertDialogContent>
+                                                </AlertDialog>
+                                            </div>
+                                        </div>
+                                    </CardHeader>
+
+                                    <CardContent className="pt-0">
+                                        <div className="flex items-center justify-between text-sm text-muted-foreground mb-3">
+                                            <span>{kb.totalDocuments} documents</span>
+                                            <span>{kb.totalWords.toLocaleString()} words</span>
+                                        </div>
+
+                                        {/* Documents List */}
+                                        {kb.documents.length > 0 && (
+                                            <div className="space-y-2 mb-4">
+                                                <Label className="text-xs font-medium">Recent Documents:</Label>
+                                                <ScrollArea className="h-32">
+                                                    <div className="space-y-1">
+                                                        {kb.documents.slice(0, 5).map((doc) => (
+                                                            <div key={doc.id} className="flex items-center gap-2 p-2 bg-muted/50 rounded text-xs">
+                                                                {getFileIcon(doc.type)}
+                                                                <span className="flex-1 truncate">{doc.name}</span>
+                                                                <span className="text-muted-foreground">
+                                                                    {formatFileSize(doc.size)}
+                                                                </span>
+                                                            </div>
+                                                        ))}
+                                                        {kb.documents.length > 5 && (
+                                                            <div className="text-xs text-muted-foreground text-center py-1">
+                                                                +{kb.documents.length - 5} more documents
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </ScrollArea>
+                                            </div>
+                                        )}
+
+                                        {/* Upload Area */}
+                                        <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-4 text-center hover:border-primary/50 transition-colors">
+                                            <Upload className="w-6 h-6 mx-auto text-muted-foreground mb-2" />
+                                            <p className="text-sm text-muted-foreground mb-2">
+                                                Drag files here or click to upload
+                                            </p>
+                                            <input
+                                                type="file"
+                                                multiple
+                                                accept=".pdf,.docx,.txt,.md,.json,.csv"
+                                                className="hidden"
+                                                id={`upload-${kb.id}`}
+                                                onChange={(e) => handleFileUpload(e.target.files, kb.id)}
+                                                aria-label="Upload documents"
+                                                title="Upload documents to knowledge base"
+                                            />
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={() => document.getElementById(`upload-${kb.id}`)?.click()}
+                                            >
+                                                Choose Files
+                                            </Button>
+                                            <p className="text-xs text-muted-foreground mt-1">
+                                                Supports: PDF, DOCX, TXT, MD, JSON, CSV
+                                            </p>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            ))
+                        )}
+                    </div>
+                </CardContent>
+            </Card>
+        </div>
+    );
+};
+
+export default DocumentKnowledgeManager;

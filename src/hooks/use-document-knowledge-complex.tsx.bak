@@ -1,0 +1,386 @@
+import { useState, useCallback } from 'react';
+// @ts-ignore - PDF and DOCX libraries don't have proper TypeScript definitions
+import pdfParse from 'pdf-parse';
+// @ts-ignore
+import mammoth from 'mammoth';
+
+export interface DocumentSource {
+    id: string;
+    name: string;
+    type: 'pdf' | 'docx' | 'txt' | 'md' | 'json' | 'csv';
+    content: string;
+    extractedText: string;
+    size: number;
+    uploadedAt: string;
+    lastProcessed: string;
+    chunks: DocumentChunk[];
+    metadata: {
+        pages?: number;
+        wordCount: number;
+        language?: string;
+        summary?: string;
+    };
+}
+
+export interface DocumentChunk {
+    id: string;
+    content: string;
+    startIndex: number;
+    endIndex: number;
+    pageNumber?: number;
+    chunkIndex: number;
+    embeddings?: number[];
+}
+
+export interface KnowledgeBase {
+    id: string;
+    name: string;
+    description: string;
+    documents: DocumentSource[];
+    createdAt: string;
+    updatedAt: string;
+    totalDocuments: number;
+    totalWords: number;
+    isActive: boolean;
+    tags: string[];
+}
+
+export const useDocumentKnowledge = () => {
+    const [knowledgeBases, setKnowledgeBases] = useState<KnowledgeBase[]>([]);
+    const [isProcessing, setIsProcessing] = useState(false);
+    const [processingProgress, setProcessingProgress] = useState(0);
+
+    // Text extraction functions
+    const extractTextFromPDF = async (file: File): Promise<string> => {
+        try {
+            const arrayBuffer = await file.arrayBuffer();
+            const uint8Array = new Uint8Array(arrayBuffer);
+            const data = await pdfParse(uint8Array);
+            return data.text;
+        } catch (error) {
+            console.error('PDF extraction error:', error);
+            throw new Error('Failed to extract text from PDF');
+        }
+    };
+
+    const extractTextFromDOCX = async (file: File): Promise<string> => {
+        try {
+            const arrayBuffer = await file.arrayBuffer();
+            const result = await mammoth.extractRawText({ arrayBuffer });
+            return result.value;
+        } catch (error) {
+            console.error('DOCX extraction error:', error);
+            throw new Error('Failed to extract text from DOCX');
+        }
+    };
+
+    const extractTextFromTXT = async (file: File): Promise<string> => {
+        try {
+            return await file.text();
+        } catch (error) {
+            console.error('TXT extraction error:', error);
+            throw new Error('Failed to read text file');
+        }
+    };
+
+    const extractTextFromJSON = async (file: File): Promise<string> => {
+        try {
+            const text = await file.text();
+            const json = JSON.parse(text);
+
+            // Convert JSON to readable text
+            const formatJSON = (obj: any, level = 0): string => {
+                const indent = '  '.repeat(level);
+                let result = '';
+
+                if (typeof obj === 'object' && obj !== null) {
+                    if (Array.isArray(obj)) {
+                        obj.forEach((item, index) => {
+                            result += `${indent}${index}: ${formatJSON(item, level + 1)}\n`;
+                        });
+                    } else {
+                        Object.entries(obj).forEach(([key, value]) => {
+                            result += `${indent}${key}: ${formatJSON(value, level + 1)}\n`;
+                        });
+                    }
+                } else {
+                    result = String(obj);
+                }
+
+                return result;
+            };
+
+            return formatJSON(json);
+        } catch (error) {
+            console.error('JSON extraction error:', error);
+            throw new Error('Failed to parse JSON file');
+        }
+    };
+
+    const extractTextFromCSV = async (file: File): Promise<string> => {
+        try {
+            const text = await file.text();
+            const lines = text.split('\n');
+            const headers = lines[0]?.split(',') || [];
+
+            let result = `CSV Data from ${file.name}\n\n`;
+            result += `Headers: ${headers.join(', ')}\n\n`;
+
+            lines.slice(1, 21).forEach((line, index) => { // First 20 rows
+                if (line.trim()) {
+                    const values = line.split(',');
+                    result += `Row ${index + 1}:\n`;
+                    headers.forEach((header, i) => {
+                        result += `  ${header.trim()}: ${values[i]?.trim() || 'N/A'}\n`;
+                    });
+                    result += '\n';
+                }
+            });
+
+            if (lines.length > 21) {
+                result += `... and ${lines.length - 21} more rows`;
+            }
+
+            return result;
+        } catch (error) {
+            console.error('CSV extraction error:', error);
+            throw new Error('Failed to parse CSV file');
+        }
+    };
+
+    // Main text extraction function
+    const extractTextFromFile = async (file: File): Promise<string> => {
+        const extension = file.name.split('.').pop()?.toLowerCase();
+
+        switch (extension) {
+            case 'pdf':
+                return await extractTextFromPDF(file);
+            case 'docx':
+                return await extractTextFromDOCX(file);
+            case 'txt':
+            case 'md':
+                return await extractTextFromTXT(file);
+            case 'json':
+                return await extractTextFromJSON(file);
+            case 'csv':
+                return await extractTextFromCSV(file);
+            default:
+                throw new Error(`Unsupported file type: ${extension}`);
+        }
+    };
+
+    // Chunk text for better processing
+    const chunkText = (text: string, chunkSize = 1000, overlap = 200): DocumentChunk[] => {
+        const chunks: DocumentChunk[] = [];
+        let startIndex = 0;
+        let chunkIndex = 0;
+
+        while (startIndex < text.length) {
+            const endIndex = Math.min(startIndex + chunkSize, text.length);
+            const content = text.slice(startIndex, endIndex);
+
+            chunks.push({
+                id: `chunk_${chunkIndex}_${Date.now()}`,
+                content,
+                startIndex,
+                endIndex,
+                chunkIndex
+            });
+
+            chunkIndex++;
+            startIndex = endIndex - overlap;
+
+            if (startIndex >= text.length) break;
+        }
+
+        return chunks;
+    };
+
+    // Generate simple summary
+    const generateSummary = (text: string): string => {
+        const words = text.split(/\s+/);
+        const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 10);
+
+        // Take first few sentences as summary
+        const summary = sentences.slice(0, 3).join('. ').trim();
+        return summary || 'No summary available';
+    };
+
+    // Process uploaded file
+    const processDocument = async (file: File, knowledgeBaseId: string): Promise<DocumentSource> => {
+        setIsProcessing(true);
+        setProcessingProgress(0);
+
+        try {
+            // Extract text
+            setProcessingProgress(25);
+            const extractedText = await extractTextFromFile(file);
+
+            // Create chunks
+            setProcessingProgress(50);
+            const chunks = chunkText(extractedText);
+
+            // Generate metadata
+            setProcessingProgress(75);
+            const wordCount = extractedText.split(/\s+/).length;
+            const summary = generateSummary(extractedText);
+
+            setProcessingProgress(100);
+
+            const document: DocumentSource = {
+                id: `doc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+                name: file.name,
+                type: file.name.split('.').pop()?.toLowerCase() as DocumentSource['type'],
+                content: await file.text().catch(() => '[Binary file]'),
+                extractedText,
+                size: file.size,
+                uploadedAt: new Date().toISOString(),
+                lastProcessed: new Date().toISOString(),
+                chunks,
+                metadata: {
+                    wordCount,
+                    summary,
+                    language: 'en' // Could be detected with a language detection library
+                }
+            };
+
+            return document;
+        } finally {
+            setIsProcessing(false);
+            setProcessingProgress(0);
+        }
+    };
+
+    // Search through knowledge base
+    const searchKnowledge = (query: string, knowledgeBaseId?: string): DocumentChunk[] => {
+        const relevantBases = knowledgeBaseId
+            ? knowledgeBases.filter(kb => kb.id === knowledgeBaseId)
+            : knowledgeBases.filter(kb => kb.isActive);
+
+        const results: DocumentChunk[] = [];
+        const queryLower = query.toLowerCase();
+
+        relevantBases.forEach(kb => {
+            kb.documents.forEach(doc => {
+                doc.chunks.forEach(chunk => {
+                    if (chunk.content.toLowerCase().includes(queryLower)) {
+                        results.push({
+                            ...chunk,
+                            // Add document context
+                            content: `[From: ${doc.name}]\n\n${chunk.content}`
+                        });
+                    }
+                });
+            });
+        });
+
+        // Sort by relevance (simple keyword matching for now)
+        return results.sort((a, b) => {
+            const aMatches = (a.content.match(new RegExp(queryLower, 'gi')) || []).length;
+            const bMatches = (b.content.match(new RegExp(queryLower, 'gi')) || []).length;
+            return bMatches - aMatches;
+        }).slice(0, 10); // Top 10 results
+    };
+
+    // Build context from documents for AI
+    const buildDocumentContext = (query: string, knowledgeBaseId?: string): string => {
+        const relevantChunks = searchKnowledge(query, knowledgeBaseId);
+
+        if (relevantChunks.length === 0) {
+            return '';
+        }
+
+        let context = '\n\n=== RELEVANT DOCUMENTS ===\n\n';
+        relevantChunks.forEach((chunk, index) => {
+            context += `Document ${index + 1}:\n${chunk.content}\n\n`;
+        });
+        context += '=== END DOCUMENTS ===\n\n';
+
+        return context;
+    };
+
+    // Load knowledge bases from localStorage
+    const loadKnowledgeBases = () => {
+        try {
+            const saved = localStorage.getItem('promptfolio-knowledge-bases');
+            if (saved) {
+                setKnowledgeBases(JSON.parse(saved));
+            }
+        } catch (error) {
+            console.error('Failed to load knowledge bases:', error);
+        }
+    };
+
+    // Save knowledge bases to localStorage
+    const saveKnowledgeBases = (bases: KnowledgeBase[]) => {
+        setKnowledgeBases(bases);
+        localStorage.setItem('promptfolio-knowledge-bases', JSON.stringify(bases));
+    };
+
+    // Create new knowledge base
+    const createKnowledgeBase = (name: string, description: string): KnowledgeBase => {
+        const newBase: KnowledgeBase = {
+            id: `kb_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+            name,
+            description,
+            documents: [],
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            totalDocuments: 0,
+            totalWords: 0,
+            isActive: true,
+            tags: []
+        };
+
+        saveKnowledgeBases([...knowledgeBases, newBase]);
+        return newBase;
+    };
+
+    // Add document to knowledge base
+    const addDocumentToKnowledgeBase = async (file: File, knowledgeBaseId: string): Promise<void> => {
+        const document = await processDocument(file, knowledgeBaseId);
+
+        const updatedBases = knowledgeBases.map(kb => {
+            if (kb.id === knowledgeBaseId) {
+                return {
+                    ...kb,
+                    documents: [...kb.documents, document],
+                    totalDocuments: kb.totalDocuments + 1,
+                    totalWords: kb.totalWords + document.metadata.wordCount,
+                    updatedAt: new Date().toISOString()
+                };
+            }
+            return kb;
+        });
+
+        saveKnowledgeBases(updatedBases);
+    };
+
+    // Delete knowledge base
+    const deleteKnowledgeBase = (id: string) => {
+        const updatedBases = knowledgeBases.filter(kb => kb.id !== id);
+        saveKnowledgeBases(updatedBases);
+    };
+
+    // Toggle knowledge base active state
+    const toggleKnowledgeBase = (id: string) => {
+        const updatedBases = knowledgeBases.map(kb =>
+            kb.id === id ? { ...kb, isActive: !kb.isActive } : kb
+        );
+        saveKnowledgeBases(updatedBases);
+    };
+
+    return {
+        knowledgeBases,
+        isProcessing,
+        processingProgress,
+        loadKnowledgeBases,
+        createKnowledgeBase,
+        addDocumentToKnowledgeBase,
+        deleteKnowledgeBase,
+        toggleKnowledgeBase,
+        searchKnowledge,
+        buildDocumentContext,
+        processDocument
+    };
+};

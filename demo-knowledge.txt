@@ -1,0 +1,45 @@
+Promptfolio Platform Knowledge Base
+
+ABOUT PROMPTFOLIO:
+Promptfolio is a comprehensive platform for creating, managing, and sharing AI prompts. It supports various categories including:
+- Visual Art prompts for image generation
+- Text Writing prompts for content creation
+- Music & Audio prompts for sound generation
+- Code Development prompts for programming assistance
+
+KEY FEATURES:
+1. Prompt Library: Curated collection of high-quality prompts
+2. Custom Categories: Organize prompts by type and use case
+3. AI Integration: Local Llama support with custom instructions
+4. Document Knowledge: Upload and reference documents for context
+5. Workflow Management: Create multi-step creative processes
+
+TECHNICAL SPECIFICATIONS:
+- Built with React 18 + TypeScript + Vite
+- Uses Supabase for backend services
+- Integrates with Ollama for local AI processing
+- Supports PDF, DOCX, TXT, JSON, and CSV file uploads
+- Implements real-time streaming responses
+
+USAGE GUIDELINES:
+- Always test prompts before publishing
+- Include relevant tags and categories
+- Provide clear descriptions and examples
+- Respect copyright and content policies
+- Encourage community collaboration
+
+BEST PRACTICES:
+1. Structure prompts with clear instructions
+2. Use specific and descriptive language
+3. Include context and constraints
+4. Test with multiple AI models
+5. Iterate based on user feedback
+
+COMMUNITY STANDARDS:
+- Be respectful and constructive
+- Share knowledge and help others
+- Maintain quality standards
+- Report inappropriate content
+- Contribute to platform improvement
+
+This knowledge base serves as a reference for users and AI assistants to better understand the Promptfolio platform and provide accurate assistance.
