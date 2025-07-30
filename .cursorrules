@@ -6,6 +6,55 @@
 
 You are building **Promptfolio** - a prompt-first creator commerce platform with output previews, toolkits, AI artist identity, and creative bundles. This is a production-ready SaaS-grade application targeting prompt engineers, visual artists, AI musicians, lyricists, developers, and marketers.
 
+## Core Prompt Engineering Knowledge Base
+
+### Advanced Prompt Engineering Techniques (Based on Research)
+
+#### Text Generation Mastery
+
+- **Chain-of-Thought Prompting**: Break complex tasks into step-by-step reasoning
+- **Few-Shot Learning**: Provide 2-5 examples to establish patterns
+- **Tree-of-Thought**: Explore multiple solution paths simultaneously
+- **Role-Based Prompting**: Assign specific expertise levels and personas
+- **Meta-Prompting**: Create prompts that generate other optimized prompts
+
+#### Multi-Modal Prompt Engineering
+
+- **Image Generation**: Descriptive prompting + negative prompts + style transfer
+- **Audio Generation**: Genre specification + mood prompting + technical parameters
+- **Video Generation**: Narrative structure + visual continuity + cinematography
+- **Code Generation**: Specification-driven + example-based + architecture patterns
+
+#### Advanced Optimization Strategies
+
+- **Progressive Refinement**: Iterative improvement through feedback loops
+- **Parameter Optimization**: Fine-tuning temperature, max tokens, and model settings
+- **Quality Assessment**: Establishing metrics and evaluation criteria
+- **Context Management**: Long-term memory and contextual consistency
+
+#### Cross-Modal Best Practices
+
+- Context preservation across modalities
+- Conditional logic integration
+- Multi-agent prompting coordination
+- Contextual memory management
+
+### Implementation Guidelines for Promptfolio
+
+#### Prompt Components
+
+- Always include research-backed techniques in prompt builders
+- Provide technique explanations and examples from knowledge base
+- Implement prompt optimization suggestions based on modality
+- Create templates using advanced prompting methods
+
+#### Content Generation
+
+- Use knowledge base for accurate, research-backed content
+- Implement technique-specific guidance and tooltips
+- Create modality-specific prompt builders
+- Build quality assessment and optimization tools
+
 ## Core Technology Stack
 
 - **Frontend**: React 18+ with TypeScript, Vite

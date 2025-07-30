@@ -1,6 +1,7 @@
 import { CustomInstructionsManager } from '@/components/CustomInstructionsManager';
 import DocumentInsights from '@/components/DocumentInsights';
-import { DocumentKnowledgeManager } from '@/components/DocumentKnowledgeManager';
+import { IntegrationTest } from '@/components/integrations/IntegrationTest';
+import { ResearchManager } from '@/components/ResearchManager';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -20,7 +21,6 @@ import {
     Brain,
     CheckCircle,
     Cpu,
-    FileText,
     Loader2,
     MessageSquare,
     Send,
@@ -264,7 +264,7 @@ export const LocalLlamaChat = () => {
             )}
 
             <Tabs defaultValue="chat" className="w-full">
-                <TabsList className="grid w-full grid-cols-5">
+                <TabsList className="grid w-full grid-cols-6">
                     <TabsTrigger value="chat" className="flex items-center gap-2">
                         <MessageSquare className="w-4 h-4" />
                         Chat
@@ -274,12 +274,16 @@ export const LocalLlamaChat = () => {
                         Instructions
                     </TabsTrigger>
                     <TabsTrigger value="knowledge" className="flex items-center gap-2">
-                        <FileText className="w-4 h-4" />
-                        Documents
+                        <Brain className="w-4 h-4" />
+                        Research
                     </TabsTrigger>
                     <TabsTrigger value="insights" className="flex items-center gap-2">
                         <BarChart3 className="w-4 h-4" />
                         Insights
+                    </TabsTrigger>
+                    <TabsTrigger value="integrations" className="flex items-center gap-2">
+                        <Zap className="w-4 h-4" />
+                        Integrations
                     </TabsTrigger>
                     <TabsTrigger value="settings" className="flex items-center gap-2">
                         <Settings className="w-4 h-4" />
@@ -564,7 +568,7 @@ export const LocalLlamaChat = () => {
                 </TabsContent>
 
                 <TabsContent value="knowledge" className="space-y-4">
-                    <DocumentKnowledgeManager className="w-full" />
+                    <ResearchManager />
                 </TabsContent>
 
                 <TabsContent value="insights" className="space-y-4">
@@ -596,6 +600,23 @@ export const LocalLlamaChat = () => {
                             </CardContent>
                         </Card>
                     )}
+                </TabsContent>
+
+                <TabsContent value="integrations" className="space-y-4">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center">
+                                <Zap className="w-5 h-5 mr-2" />
+                                Integration Testing & Setup
+                            </CardTitle>
+                            <CardDescription>
+                                Test and configure your LinkedIn, Notion, and Email integrations for production deployment
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <IntegrationTest />
+                        </CardContent>
+                    </Card>
                 </TabsContent>
 
                 <TabsContent value="settings" className="space-y-4">

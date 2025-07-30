@@ -2,6 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { supabase } from "@/integrations/supabase/client";
 import { SignOutButton, useUser } from "@clerk/clerk-react";
 import { Beaker, Briefcase, Home, LogOut, Menu, Search, Settings, Sparkles, User, X } from "lucide-react";
@@ -54,25 +55,74 @@ export function Header() {
                     </span>
                 </Link>
 
-                {/* Desktop Navigation */}
+                {/* Desktop Navigation - Premium, sectioned Lab dropdown */}
                 <nav className="hidden md:flex items-center space-x-6">
-                    <Link to="/explore" className="text-sm font-medium hover:text-primary transition-colors">
-                        Explore
-                    </Link>
-                    <Link to="/lab" className="text-sm font-medium hover:text-primary transition-colors">
-                        Lab
-                    </Link>
-                    <Link to="/artists" className="text-sm font-medium hover:text-primary transition-colors">
-                        Artists
-                    </Link>
-                    <Link to="/music-studio" className="text-sm font-medium hover:text-primary transition-colors">
-                        Music Studio
-                    </Link>
-                    {isSignedIn && (
-                        <Link to="/dashboard" className="text-sm font-medium hover:text-primary transition-colors">
-                            Dashboard
-                        </Link>
-                    )}
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Link to="/explore" className="text-sm font-medium hover:text-primary transition-colors">
+                                    Explore
+                                </Link>
+                            </TooltipTrigger>
+                            <TooltipContent>Marketplace: All prompts & bundles</TooltipContent>
+                        </Tooltip>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" className="text-sm font-medium px-2 flex items-center">
+                                    <Beaker className="mr-2 h-4 w-4" /> Lab
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="start" className="w-64">
+                                <div className="px-3 py-2 text-xs font-semibold text-muted-foreground">Prompt Workflows</div>
+                                <DropdownMenuItem asChild>
+                                    <Link to="/lab/workflows" className="flex items-center gap-2"><Beaker className="h-4 w-4 text-primary" /> Workflows</Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem asChild>
+                                    <Link to="/lab/models" className="flex items-center gap-2"><Settings className="h-4 w-4 text-code" /> Models</Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem asChild>
+                                    <Link to="/lab/packs" className="flex items-center gap-2"><Briefcase className="h-4 w-4 text-primary" /> Packs</Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem asChild>
+                                    <Link to="/lab/install" className="flex items-center gap-2"><Settings className="h-4 w-4 text-muted-foreground" /> Install Guide</Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <div className="px-3 py-2 text-xs font-semibold text-muted-foreground">Music Creation</div>
+                                <DropdownMenuItem asChild>
+                                    <Link to="/lab/music" className="flex items-center gap-2"><Sparkles className="h-4 w-4 text-music" /> Music Prompts</Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem asChild>
+                                    <Link to="/music-studio" className="flex items-center gap-2"><Sparkles className="h-4 w-4 text-music" /> Music Studio</Link>
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Link to="/tools/pdf-analyzer" className="text-sm font-medium hover:text-primary transition-colors">
+                                    PDF Analyzer
+                                </Link>
+                            </TooltipTrigger>
+                            <TooltipContent>Analyze and extract from PDFs</TooltipContent>
+                        </Tooltip>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Link to="/artists" className="text-sm font-medium hover:text-primary transition-colors">
+                                    Artists
+                                </Link>
+                            </TooltipTrigger>
+                            <TooltipContent>Discover top AI creators, musicians, and visual artists</TooltipContent>
+                        </Tooltip>
+                        {isSignedIn && (
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <Link to="/dashboard" className="text-sm font-medium hover:text-primary transition-colors">
+                                        Dashboard
+                                    </Link>
+                                </TooltipTrigger>
+                                <TooltipContent>Your creator dashboard</TooltipContent>
+                            </Tooltip>
+                        )}
+                    </TooltipProvider>
                 </nav>
 
                 {/* Search Bar - Desktop */}
@@ -168,7 +218,7 @@ export function Header() {
                             />
                         </div>
 
-                        {/* Mobile Navigation */}
+                        {/* Mobile Navigation - Sectioned Lab dropdown */}
                         <nav className="flex flex-col space-y-3">
                             <Link
                                 to="/explore"
@@ -178,13 +228,30 @@ export function Header() {
                                 <Home className="h-4 w-4" />
                                 <span>Explore</span>
                             </Link>
+                            {/* Lab Dropdown (mobile, sectioned) */}
+                            <details>
+                                <summary className="flex items-center space-x-2 text-sm font-medium hover:text-primary transition-colors p-2 cursor-pointer">
+                                    <Beaker className="h-4 w-4" />
+                                    <span>Lab</span>
+                                </summary>
+                                <div className="ml-6 flex flex-col space-y-2 mt-2">
+                                    <div className="text-xs font-semibold text-muted-foreground px-2 pt-2">Prompt Workflows</div>
+                                    <Link to="/lab/workflows" className="p-2 hover:text-primary flex items-center gap-2" onClick={() => setIsMobileMenuOpen(false)}><Beaker className="h-4 w-4 text-primary" /> Workflows</Link>
+                                    <Link to="/lab/models" className="p-2 hover:text-primary flex items-center gap-2" onClick={() => setIsMobileMenuOpen(false)}><Settings className="h-4 w-4 text-code" /> Models</Link>
+                                    <Link to="/lab/packs" className="p-2 hover:text-primary flex items-center gap-2" onClick={() => setIsMobileMenuOpen(false)}><Briefcase className="h-4 w-4 text-primary" /> Packs</Link>
+                                    <Link to="/lab/install" className="p-2 hover:text-primary flex items-center gap-2" onClick={() => setIsMobileMenuOpen(false)}><Settings className="h-4 w-4 text-muted-foreground" /> Install Guide</Link>
+                                    <div className="text-xs font-semibold text-muted-foreground px-2 pt-4">Music Creation</div>
+                                    <Link to="/lab/music" className="p-2 hover:text-primary flex items-center gap-2" onClick={() => setIsMobileMenuOpen(false)}><Sparkles className="h-4 w-4 text-music" /> Music Prompts</Link>
+                                    <Link to="/music-studio" className="p-2 hover:text-primary flex items-center gap-2" onClick={() => setIsMobileMenuOpen(false)}><Sparkles className="h-4 w-4 text-music" /> Music Studio</Link>
+                                </div>
+                            </details>
                             <Link
-                                to="/lab"
+                                to="/tools/pdf-analyzer"
                                 className="flex items-center space-x-2 text-sm font-medium hover:text-primary transition-colors p-2"
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >
-                                <Beaker className="h-4 w-4" />
-                                <span>Lab</span>
+                                <Search className="h-4 w-4" />
+                                <span>PDF Analyzer</span>
                             </Link>
                             <Link
                                 to="/artists"
@@ -193,14 +260,6 @@ export function Header() {
                             >
                                 <User className="h-4 w-4" />
                                 <span>Artists</span>
-                            </Link>
-                            <Link
-                                to="/music-studio"
-                                className="flex items-center space-x-2 text-sm font-medium hover:text-primary transition-colors p-2"
-                                onClick={() => setIsMobileMenuOpen(false)}
-                            >
-                                <Sparkles className="h-4 w-4" />
-                                <span>Music Studio</span>
                             </Link>
                             <Link
                                 to="/dashboard"

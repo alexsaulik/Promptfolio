@@ -222,8 +222,8 @@ export const AIAssistantWidget = () => {
                                             className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
                                         >
                                             <div className={`max-w-[85%] rounded-lg p-4 ${message.type === 'user'
-                                                    ? 'bg-primary text-primary-foreground'
-                                                    : 'bg-muted border border-border/50'
+                                                ? 'bg-primary text-primary-foreground'
+                                                : 'bg-muted border border-border/50'
                                                 }`}>
                                                 <div className="flex items-center space-x-2 mb-2">
                                                     {message.type === 'user' ? (

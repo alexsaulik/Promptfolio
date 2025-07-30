@@ -1,7 +1,5 @@
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
-import { RainbowButton } from "@/components/magicui/rainbow-button";
-import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { PromptCategoriesGrid } from "@/components/sections/PromptCategoriesGrid";
 import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
@@ -140,21 +138,26 @@ export default function Index() {
 
                         {/* CTA Buttons */}
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <ShimmerButton
-                                className="bg-gradient-to-r from-purple-600 to-pink-600"
+                            <Button
+                                className="bg-gradient-to-r from-primary via-primary-glow to-pink-500 text-white shadow-glow hover:shadow-elevated hover:scale-105 rounded-2xl border border-white/10 backdrop-blur-sm transition-all duration-300 text-lg font-semibold px-8 py-4"
+                                size="lg"
                                 onClick={() => navigate('/lab/local-ai')}
                             >
                                 <Bot className="w-5 h-5 mr-2" />
                                 Try AI Assistant
-                            </ShimmerButton>
-
-                            <RainbowButton onClick={() => navigate('/explore')}>
-                                <Sparkles className="w-5 h-5 mr-2" />
-                                Explore Prompts
-                            </RainbowButton>
+                            </Button>
 
                             <Button
-                                variant="outline"
+                                className="bg-gradient-to-r from-pink-500 via-primary-glow to-primary text-white shadow-glow hover:shadow-elevated hover:scale-105 rounded-2xl border border-white/10 backdrop-blur-sm transition-all duration-300 text-lg font-semibold px-8 py-4"
+                                size="lg"
+                                onClick={() => navigate('/explore')}
+                            >
+                                <Sparkles className="w-5 h-5 mr-2" />
+                                Explore Prompts
+                            </Button>
+
+                            <Button
+                                className="bg-gradient-to-r from-primary via-primary-glow to-pink-500 text-white shadow-glow hover:shadow-elevated hover:scale-105 rounded-2xl border border-white/10 backdrop-blur-sm transition-all duration-300 text-lg font-semibold px-8 py-4"
                                 size="lg"
                                 onClick={() => navigate('/lab')}
                             >

@@ -95,10 +95,20 @@ export function PromptCard({ prompt }: PromptCardProps) {
         // Audio play logic would go here
     };
 
+    const handleCardClick = () => {
+        if (prompt.slug) {
+            navigate(`/prompt/${prompt.slug}`);
+        } else if (prompt.id) {
+            navigate(`/prompt/${prompt.id}`);
+        } else {
+            alert('Prompt is missing a valid slug and id. Please contact support.');
+        }
+    };
+
     return (
         <Card
             className="group relative overflow-hidden rounded-2xl border-border/50 bg-card/50 backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-elevated hover:border-primary/20 cursor-pointer"
-            onClick={() => navigate(`/prompt/${prompt.slug || prompt.id}`)}
+            onClick={handleCardClick}
         >
             {/* Cover Image/Preview */}
             <div className="relative aspect-video w-full overflow-hidden">
@@ -240,7 +250,13 @@ export function PromptCard({ prompt }: PromptCardProps) {
                         className="flex-1"
                         onClick={(e) => {
                             e.stopPropagation(); // Prevent card click
-                            navigate(`/prompt/${prompt.slug || prompt.id}`);
+                            if (prompt.slug) {
+                                navigate(`/prompt/${prompt.slug}`);
+                            } else if (prompt.id) {
+                                navigate(`/prompt/${prompt.id}`);
+                            } else {
+                                alert('Prompt is missing a valid slug and id. Please contact support.');
+                            }
                         }}
                     >
                         Preview

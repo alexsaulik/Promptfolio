@@ -1,0 +1,178 @@
+/* Magic UI components CSS */
+
+/* Magic Card Styles */
+.magic-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    background: hsl(var(--background));
+    transition: all 0.2s;
+}
+
+.magic-card-spotlight {
+    position: absolute;
+    inset: -1px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+.magic-card:hover .magic-card-spotlight {
+    opacity: 1;
+}
+
+.magic-card-border {
+    position: absolute;
+    inset: -1px;
+    border-radius: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    padding: 1px;
+    background: linear-gradient(to bottom right, #9E7AFF, #FE8BBB);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+}
+
+.magic-card:hover .magic-card-border {
+    opacity: 1;
+}
+
+/* Neon Gradient Card Styles */
+.neon-card {
+    position: relative;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 1.25rem;
+    background: rgba(0, 0, 0, 0.96);
+    padding: 3rem 2rem;
+}
+
+.neon-card-bg {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.5s;
+    pointer-events: none;
+    background: radial-gradient(circle at 50% 50%, #000 25%, transparent 100%);
+    z-index: 10;
+}
+
+.neon-card:hover .neon-card-bg {
+    opacity: 1;
+}
+
+.neon-card-border {
+    position: absolute;
+    inset: 0;
+    opacity: 0.5;
+    transition: opacity 0.5s;
+    pointer-events: none;
+    background: linear-gradient(60deg, #ff00aa, #00FFF1);
+    filter: blur(10px);
+    border-radius: calc(1.25rem - 2px);
+    padding: 5px;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+}
+
+.neon-card:hover .neon-card-border {
+    opacity: 1;
+}
+
+.neon-card-glow {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    mix-blend-mode: screen;
+    transition: opacity 0.5s;
+    background: linear-gradient(60deg, #ff00aa, #00FFF1);
+    filter: blur(20px);
+    border-radius: calc(1.25rem - 2px);
+    padding: 5px;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+}
+
+.neon-card:hover .neon-card-glow {
+    opacity: 1;
+}
+
+.neon-card-content {
+    position: relative;
+    z-index: 20;
+}
+
+/* Particles Styles */
+.particles-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    animation: float 3s ease-in-out infinite;
+}
+
+.particle-1 {
+    top: 10%;
+    left: 20%;
+    animation-delay: 0s;
+}
+
+.particle-2 {
+    top: 30%;
+    left: 60%;
+    animation-delay: 1s;
+}
+
+.particle-3 {
+    top: 50%;
+    left: 80%;
+    animation-delay: 0.5s;
+}
+
+.particle-4 {
+    top: 70%;
+    left: 40%;
+    animation-delay: 1.5s;
+}
+
+.particle-5 {
+    top: 20%;
+    left: 90%;
+    animation-delay: 2s;
+}
+
+.particle-6 {
+    top: 80%;
+    left: 10%;
+    animation-delay: 0.8s;
+}
+
+.particle-7 {
+    top: 60%;
+    left: 30%;
+    animation-delay: 1.2s;
+}
+
+.particle-8 {
+    top: 40%;
+    left: 70%;
+    animation-delay: 0.3s;
+}

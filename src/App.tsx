@@ -21,14 +21,18 @@ import Explore from "./pages/Explore";
 import HelpCenter from "./pages/HelpCenter";
 import Index from "./pages/Index";
 import Labs from "./pages/Labs";
+import LinkedInCallback from "./pages/LinkedInCallback";
 import LocalAI from "./pages/LocalAI";
 import ModelDetail from "./pages/ModelDetail";
 import MusicPrompts from "./pages/MusicPrompts";
 import MusicStudio from "./pages/MusicStudio";
 import NotFound from "./pages/NotFound";
+import { PDFDemo } from "./pages/PDFDemo";
 import Pricing from "./pages/Pricing";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import PromptDetail from "./pages/PromptDetail";
+import PromptEngineeringGuide from "./pages/PromptEngineeringGuide";
+import { Research } from "./pages/Research";
 import SignOut from "./pages/SignOut";
 import TermsOfService from "./pages/TermsOfService";
 import TitleEffectsDemo from "./pages/TitleEffectsDemo";
@@ -72,10 +76,14 @@ const App = () => (
                         <Route path="/contact" element={<Contact />} />
                         <Route path="/help" element={<HelpCenter />} />
                         <Route path="/docs" element={<Documentation />} />
+                        <Route path="/guide/prompt-engineering" element={<PromptEngineeringGuide />} />
+                        <Route path="/tools/pdf-analyzer" element={<PDFDemo />} />
+                        <Route path="/research" element={<Research />} />
                         <Route path="/community" element={<Community />} />
                         <Route path="/prompts/image" element={<ImagePrompts />} />
                         <Route path="/prompts/code" element={<CodePrompts />} />
                         <Route path="/prompts/text" element={<TextPrompts />} />
+                        <Route path="/auth/linkedin" element={<LinkedInCallback />} />
                         <Route path="/auth/*" element={<Auth />} />
                         <Route path="/sign-out" element={<SignOut />} />
                         <Route
@@ -96,6 +104,7 @@ const App = () => (
                         />
                         <Route path="/lab" element={<Labs />} />
                         <Route path="/labs" element={<Labs />} />
+                        <Route path="/local-ai" element={<LocalAI />} />
                         <Route path="/lab/image-generation" element={<ImageGeneration />} />
                         <Route path="/lab/video-processing" element={<VideoProcessing />} />
                         <Route path="/lab/audio-creation" element={<AudioCreation />} />

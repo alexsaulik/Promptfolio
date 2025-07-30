@@ -1,0 +1,36 @@
+.aurora-text {
+    --aurora-colors: linear-gradient(to right, #FF0080, #7928CA, #0070F3, #38bdf8, #FF0080);
+    --aurora-duration: 8s;
+    background-image: var(--aurora-colors);
+    background-size: 300% 100%;
+    animation: aurora var(--aurora-duration) linear infinite;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* For different color variations */
+.aurora-pink-purple {
+    --aurora-colors: linear-gradient(to right, #FF0080, #7928CA, #FF0080);
+}
+
+.aurora-blue {
+    --aurora-colors: linear-gradient(to right, #0070F3, #38bdf8, #0070F3);
+}
+
+.aurora-rainbow {
+    --aurora-colors: linear-gradient(to right, #FF0080, #FF8C00, #FFD700, #7CFC00, #0070F3, #7928CA, #FF0080);
+}
+
+/* Different speeds */
+.aurora-fast {
+    --aurora-duration: 5s;
+}
+
+.aurora-slow {
+    --aurora-duration: 10s;
+}
+
+.aurora-very-slow {
+    --aurora-duration: 15s;
+}

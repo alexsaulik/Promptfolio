@@ -83,7 +83,16 @@ const Explore = () => {
     }, [sortBy]);
 
     // 🎯 Enhanced Mock Data - Comprehensive Prompt Library
-    const prompts = [
+    // Helper to generate slug from title
+    function generateSlug(title: string) {
+        return title
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/(^-|-$)+/g, '');
+    }
+
+    // Original prompts array
+    const originalPrompts = [
         {
             id: 'cinematic-portrait-generator',
             title: 'Cinematic Portrait Generator',
@@ -487,6 +496,12 @@ const Explore = () => {
             languages: ['Python', 'Documentation']
         }
     ];
+
+    // Ensure every prompt has a slug
+    const prompts = originalPrompts.map(prompt => ({
+        ...prompt,
+        slug: prompt.slug || generateSlug(prompt.title),
+    }));
 
     // Filter prompts based on search and active category
     const filteredPrompts = prompts.filter(prompt => {
